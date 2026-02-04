@@ -1,717 +1,1395 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Docentes Brown | Consultora Educativa</title>
+
+  <!-- Performance: faster font loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=League+Spartan:wght@400;500;600;700;800&family=IBM+Plex+Sans+Hebrew:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    *{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',sans-serif}
-
-    h1, h2, h3, h4{
-      font-family:'League Spartan',sans-serif;
-      letter-spacing:0.5px;
+    /* =========================
+       BASE
+       ========================= */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:#f6f8fb;
+      color:#1f2933;
+      line-height:1.6;
+      font-family:'Inter',sans-serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
     }
-
-    .section-title p, .hero p{
-      font-family:'IBM Plex Sans Hebrew',sans-serif;
-    }
-
-    body{background:#f6f8fb;color:#1f2933;line-height:1.6}
 
     :root{
-      --primary:#1f3b5c;
-      --secondary:#4d7fb8;
-      --light:#ffffff;
-      --gray:#6b7280;
+      --brand-blue:#1f3b5c;
+      --brand-blue-2:#4d7fb8;
+      --brand-cream:#f3efdc;
+      --text:#1f2933;
+      --muted:#6b7280;
+      --surface:#ffffff;
+      --shadow:0 12px 34px rgba(0,0,0,.10);
+      --shadow-soft:0 10px 26px rgba(0,0,0,.08);
+      --radius:18px;
+      --hairline:rgba(31,59,92,.12);
+      --focus:rgba(77,127,184,.22);
+      --sticky-offset: 116px; /* fallback; updated via JS */
     }
 
-    header{
-      background:var(--primary);
-      color:white;
-      padding:60px 20px;
+    .container{max-width:1200px;margin:auto;padding:0 20px}
+
+    /* =========================
+       TIPOGRAFÍA (REQUISITO)
+       H1: League Spartan
+       H2: League Spartan (más chico)
+       H3: IBM Plex Sans Hebrew
+       ========================= */
+    h1{
+      font-family:'League Spartan',sans-serif;
+      letter-spacing:.3px;
+      font-weight:900;
+    }
+    h2{
+      font-family:'League Spartan',sans-serif;
+      letter-spacing:.25px;
+      font-weight:800;
+    }
+    h3{
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+      letter-spacing:.1px;
+      font-weight:700;
+    }
+    h4{
+      font-family:'League Spartan',sans-serif;
+      letter-spacing:.2px;
+      font-weight:800;
     }
 
-    .container{max-width:1200px;margin:auto}
+    /* =========================
+       ACCESSIBILITY / FOCUS
+       ========================= */
+    a, button, input, textarea { -webkit-tap-highlight-color: transparent; }
+    :focus-visible{
+      outline:none;
+      box-shadow:0 0 0 4px var(--focus);
+      border-radius:12px;
+    }
 
-    nav{
+    /* =========================
+       ANIMACIONES SUAVES (desktop first)
+       ========================= */
+    @media (prefers-reduced-motion: no-preference) and (min-width: 901px){
+      .reveal{
+        opacity:0;
+        transform:translateY(10px);
+        filter:blur(6px);
+        animation:reveal .7s ease-out forwards;
+        will-change:opacity,transform,filter;
+      }
+      .reveal.d1{animation-delay:.08s}
+      .reveal.d2{animation-delay:.18s}
+      .reveal.d3{animation-delay:.28s}
+      .reveal.d4{animation-delay:.38s}
+      @keyframes reveal{
+        to{opacity:1;transform:translateY(0);filter:blur(0)}
+      }
+    }
+
+    /* =========================
+       STICKY SHELL (TOPBAR + NAV)
+       ========================= */
+    .sticky-shell{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      /* subtle separation from content */
+      box-shadow:0 10px 30px rgba(0,0,0,.06);
+    }
+
+    /* =========================
+       ZÓCALO SUPERIOR (FULL WIDTH) - PC ONLY
+       ========================= */
+    .topbar{
+      width:100%;
+      background:var(--brand-cream);
+      color:var(--brand-blue);
+      border-bottom:1px solid var(--hairline);
+    }
+    .topbar-inner{
+      max-width:1200px;
+      margin:auto;
+      padding:10px 20px;
       display:flex;
-      justify-content:space-between;
       align-items:center;
-      margin-bottom:50px;
+      justify-content:space-between;
+      gap:12px;
     }
-
-    nav h1{font-size:22px;font-weight:800}
-
-    nav a{
-      color:white;
+    .topbar-left{
+      font-weight:900;
+      font-size:12px;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+      color:var(--brand-blue);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .topbar-right{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      gap:16px;
+      font-size:13px;
+      font-weight:700;
+      color:var(--brand-blue);
+    }
+    .topbar a{
+      color:var(--brand-blue);
       text-decoration:none;
-      margin-left:25px;
-      font-weight:500
+      border-bottom:1px solid rgba(31,59,92,.25);
+    }
+    .topbar a:hover{opacity:.86}
+
+    /* =========================
+       NAV BAR (below topbar)
+       ========================= */
+    .nav-bar{
+      width:100%;
+      background:rgba(19,44,71,.70);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .nav-row{
+      max-width:1200px;
+      margin:auto;
+      padding:12px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .brand h1{font-size:20px;color:#fff}
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+    .nav-links a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      opacity:.92;
+      position:relative;
+      padding:6px 2px;
+    }
+    .nav-links a:hover{opacity:1}
+    .nav-links a.active::after{
+      content:"";
+      position:absolute;
+      left:2px; right:2px; bottom:0;
+      height:2px;
+      background:rgba(243,239,220,.92);
+      border-radius:999px;
     }
 
+    .cta-pill{
+      display:inline-flex;
+      text-decoration:none;
+      font-weight:900;
+      color:#0b1220;
+      background:rgba(243,239,220,.92);
+      border:1px solid rgba(255,255,255,.18);
+      padding:10px 12px;
+      border-radius:999px;
+      white-space:nowrap;
+      transition:transform .15s ease, opacity .15s ease;
+    }
+    .cta-pill:hover{opacity:.95}
+    .cta-pill:active{transform:scale(.985)}
+
+    /* Mobile nav */
+    .hamburger{
+      display:none;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:900;
+    }
+    .mobile-menu{
+      display:none;
+      padding:12px 20px 14px;
+      background:rgba(19,44,71,.82);
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .mobile-menu a{
+      display:block;
+      padding:10px 6px;
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      opacity:.95;
+    }
+    .mobile-menu a + a{border-top:1px solid rgba(255,255,255,.10)}
+    .mobile-menu a:hover{opacity:1}
+    .mobile-menu.show{display:block}
+
+    /* =========================
+       HEADER PREMIUM
+       ========================= */
+    header{
+      position:relative;
+      color:#fff;
+      padding:36px 0 72px;
+      background:
+        radial-gradient(900px 420px at 18% 20%, rgba(77,127,184,.32), transparent 60%),
+        radial-gradient(700px 360px at 86% 36%, rgba(255,255,255,.10), transparent 62%),
+        linear-gradient(160deg, #132c47 0%, var(--brand-blue) 44%, #0f2238 100%);
+      overflow:hidden;
+    }
+
+    /* grain only on desktop (performance) */
+    @media(min-width:901px){
+      header::after{
+        content:"";
+        position:absolute; inset:0;
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
+        mix-blend-mode:soft-light;
+        opacity:.32;
+        pointer-events:none;
+      }
+    }
+
+    /* HERO */
     .hero{
+      position:relative;
+      z-index:2;
       display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:40px;
-      align-items:center
+      grid-template-columns:1.1fr .9fr;
+      gap:44px;
+      align-items:stretch;
+    }
+    .hero-main-title{
+      font-size:clamp(34px,4.8vw,68px);
+      line-height:1;
+      margin-bottom:10px;
+      text-transform:uppercase;
+    }
+    .hero-subtitle{
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+      font-size:18px;
+      font-weight:650;
+      color:#e6edf7;
+      margin-bottom:18px;
+      max-width:60ch;
+    }
+    .hero-desc{
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+      font-size:16.8px;
+      color:#d1d9e6;
+      margin-bottom:26px;
+      max-width:58ch;
     }
 
-    .hero h2{font-size:42px;font-weight:800;margin-bottom:20px}
-    .hero p{font-size:18px;margin-bottom:30px;color:#e5e7eb}
-
-    .buttons a{
-      display:inline-block;
-      padding:14px 26px;
-      border-radius:8px;
+    .buttons{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 18px;
+      border-radius:14px;
       text-decoration:none;
-      margin-right:15px;
-      font-weight:600
+      font-weight:900;
+      letter-spacing:.15px;
+      transition:transform .15s ease, opacity .15s ease, background .15s ease, box-shadow .15s ease;
+      user-select:none;
+    }
+    .btn:active{transform:scale(.98)}
+    .btn-primary{
+      background:var(--brand-blue-2);
+      color:#fff;
+      box-shadow:0 16px 44px rgba(77,127,184,.22);
+    }
+    .btn-primary:hover{background:#3f74af}
+    .btn-outline{
+      border:2px solid rgba(255,255,255,.88);
+      color:#fff;
+      background:transparent;
+    }
+    .btn-outline:hover{opacity:.92}
+
+    /* HERO VISUAL (solo móvil; en PC lo movemos afuera del header) */
+    .hero-visual{
+      border-radius:24px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 22px 60px rgba(0,0,0,.20);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+      min-height:320px;
+    }
+    .hero-visual::before{
+      content:"";
+      position:absolute;
+      width:520px;height:520px;
+      left:-220px; top:-240px;
+      background:radial-gradient(circle at center, rgba(77,127,184,.38), transparent 62%);
+      filter:blur(2px);
+    }
+    .hero-visual::after{
+      content:"";
+      position:absolute;
+      width:420px;height:420px;
+      right:-220px; bottom:-250px;
+      background:radial-gradient(circle at center, rgba(243,239,220,.18), transparent 60%);
+    }
+    .hero-cards{
+      position:relative;
+      display:grid;
+      gap:12px;
+    }
+    .hc{
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:18px;
+      padding:14px 14px;
+      backdrop-filter: blur(6px);
+    }
+    .hc .eyebrow{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.7px;
+      text-transform:uppercase;
+      color:rgba(243,239,220,.92);
+      margin-bottom:6px;
+    }
+    .hc h4{color:#fff;font-size:18px;margin-bottom:6px}
+    .hc p{color:#dbe5f3;font-size:14.5px;font-family:'IBM Plex Sans Hebrew',sans-serif}
+    .hc-badges{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;
+    }
+    .badge{
+      font-size:12px;
+      font-weight:900;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.08);
+      padding:8px 10px;
+      border-radius:999px;
+      letter-spacing:.2px;
     }
 
-    .btn-primary{background:var(--secondary);color:white}
-    .btn-outline{border:2px solid white;color:white}
+    /* =========================
+       HIGHLIGHTS (PC: editorial cards)
+       ========================= */
+    .highlights{
+      padding:54px 0 0;
+      background:#f6f8fb;
+    }
+    .highlights-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+      margin-top:0;
+      align-items:stretch;
+    }
+    .highlight{
+      background:#fff;
+      border:1px solid rgba(17,24,39,.06);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px 18px;
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      height:100%;
+      min-height:228px;
+    }
+    .highlight::after{
+      content:"";
+      position:absolute;
+      top:0; left:0; right:0;
+      height:4px;
+      background:linear-gradient(90deg, var(--brand-blue-2), rgba(77,127,184,.18));
+    }
+    .highlight .eyebrow{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.7px;
+      text-transform:uppercase;
+      color:rgba(31,59,92,.68);
+      margin-bottom:6px;
+    }
+    .highlight h4{
+      color:var(--brand-blue);
+      font-size:20px;
+      margin-bottom:6px;
+    }
+    .highlight p{
+      color:var(--muted);
+      font-size:14.8px;
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+      margin-bottom:12px;
+    }
+    .highlight-badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:auto;
+    }
+    .highlight-badges .badge{
+      color:var(--brand-blue);
+      background:rgba(31,59,92,.06);
+      border:1px solid rgba(31,59,92,.12);
+    }
 
-    section{padding:80px 20px}
-
+    /* =========================
+       SECCIONES
+       ========================= */
+    section{padding:78px 0}
     .section-title{
       text-align:center;
-      max-width:700px;
-      margin:0 auto 60px
+      max-width:760px;
+      margin:0 auto 54px;
+      padding:0 8px;
     }
-
-    .section-title h3{font-size:34px;margin-bottom:15px}
-    .section-title p{color:var(--gray)}
+    .section-title h3{font-size:22px;margin-bottom:10px;color:var(--brand-blue)}
+    .section-title p{color:var(--muted);font-size:16px}
 
     .grid-3{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-      gap:30px
+      grid-template-columns:repeat(3,1fr);
+      gap:24px;
     }
 
     .card{
-      background:white;
-      padding:35px 30px;
-      border-radius:16px;
-      box-shadow:0 5px 20px rgba(0,0,0,.05)
+      background:var(--surface);
+      padding:30px 26px;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:visible;
+      border:1px solid rgba(17,24,39,.06);
+      transition:transform .15s ease, box-shadow .15s ease;
     }
-
-    .card h4{margin-bottom:15px;font-size:22px}
-    .card p{color:var(--gray)}
-
-    .method{
-      background:#eef3f9
+    @media (hover:hover){
+      .card:hover{
+        transform:translateY(-2px);
+        box-shadow:0 18px 44px rgba(0,0,0,.12);
+      }
     }
+    .card h4{margin-bottom:10px;font-size:22px;color:#0f172a}
+    .card p{color:var(--muted);font-size:15.5px}
 
+    /* Card CTA */
+    .card.interactive{padding-bottom:60px}
+    .card-btn{
+      position:absolute;
+      left:50%;
+      bottom:-18px;
+      transform:translateX(-50%);
+      background:var(--brand-blue-2);
+      color:#fff;
+      border:none;
+      padding:10px 16px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 12px 28px rgba(0,0,0,.18);
+      white-space:nowrap;
+    }
+    .card-btn:hover{opacity:.92}
+
+    .method{background:#eef3f9}
     .steps{
       display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:25px
+      grid-template-columns:repeat(6,1fr);
+      gap:16px;
     }
-
     .step{
-      background:white;
-      padding:25px;
-      border-radius:14px;
-      text-align:center
+      background:#fff;
+      padding:18px 14px;
+      border-radius:16px;
+      text-align:center;
+      box-shadow:0 10px 26px rgba(0,0,0,.05);
+      border:1px solid rgba(17,24,39,.05);
     }
-
-    .step span{
-      font-size:26px;
-      font-weight:800;
-      color:var(--secondary)
-    }
+    .step span{display:block;font-size:26px;font-weight:900;color:var(--brand-blue-2);margin-bottom:6px}
+    .step p{font-weight:900;color:#374151;font-size:14px}
 
     .about{
-      background:var(--primary);
-      color:white
+      background:var(--brand-blue);
+      color:#fff;
+      position:relative;
+      overflow:hidden;
     }
-
-    .about p{max-width:800px;margin:auto;color:#d1d5db}
-
-    .contact{
-      background:#f9fafb
+    .about::before{
+      content:"";
+      position:absolute;
+      width:780px;height:780px;
+      left:-360px; top:-420px;
+      background:radial-gradient(circle at center, rgba(77,127,184,.28), transparent 62%);
+      opacity:.9;
     }
-
-    form{
-      max-width:600px;
+    .about .section-title h3{
+      color:#f2f4f7;
+      font-size:24px;
+      text-transform:none;
+    }
+    .about .section-title p{
+      color:#d7e0ee;
+    }
+    .about p{
+      position:relative;
+      max-width:880px;
       margin:auto;
-      background:white;
-      padding:40px;
-      border-radius:16px;
-      box-shadow:0 5px 20px rgba(0,0,0,.05)
+      color:#d7e0ee;
+      font-size:16.6px;
+      line-height:1.78;
+      padding:0 8px;
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
     }
 
+    .contact{background:#f9fafb}
+    form{
+      max-width:640px;
+      margin:auto;
+      background:#fff;
+      padding:34px;
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(17,24,39,.06);
+    }
     form input, form textarea{
       width:100%;
-      padding:14px;
-      margin-bottom:18px;
+      padding:14px 14px;
+      margin-bottom:14px;
       border:1px solid #d1d5db;
-      border-radius:8px
+      border-radius:14px;
+      font-size:15px;
+      outline:none;
+      font-family:'Inter',sans-serif;
     }
-
+    form input:focus, form textarea:focus{
+      border-color:rgba(77,127,184,.7);
+      box-shadow:0 0 0 4px rgba(77,127,184,.15);
+    }
     form button{
       width:100%;
       padding:14px;
-      background:var(--primary);
-      color:white;
+      background:var(--brand-blue);
+      color:#fff;
       border:none;
-      border-radius:8px;
-      font-weight:600;
-      cursor:pointer
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:15px;
     }
+    form button:hover{opacity:.95}
 
     footer{
-      background:#111827;
+      background:#0b1220;
       color:#9ca3af;
-      padding:40px 20px;
-      text-align:center
+      padding:34px 0;
+      text-align:center;
+    }
+
+    /* Info móvil (solo celular) */
+    .mobile-bottom-info{
+      display:none;
+      max-width:720px;
+      margin:16px auto 0;
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      text-align:left;
+    }
+    .mobile-bottom-info h4{
+      color:#fff;
+      margin-bottom:10px;
+      font-size:16px;
+      letter-spacing:.2px;
+      font-family:'League Spartan',sans-serif;
+      font-weight:900;
+    }
+    .quick-actions{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+    .qa{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      text-decoration:none;
+      color:#fff;
+      font-weight:900;
+    }
+    .qa small{color:#cbd5e1;font-weight:700;font-family:'IBM Plex Sans Hebrew',sans-serif}
+    .qa:hover{opacity:.92}
+
+    /* MODAL */
+    .modal{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.55);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:9999;
+      padding:16px;
+    }
+    .modal.show{opacity:1;pointer-events:auto}
+    .modal-content{
+      width:min(920px, 100%);
+      background:#fff;
+      border-radius:22px;
+      padding:22px;
+      box-shadow:0 28px 80px rgba(0,0,0,.35);
+      max-height:86vh;
+      overflow:auto;
+      position:relative;
+    }
+    .modal-title{
+      font-size:22px;
+      margin-bottom:12px;
+      color:var(--brand-blue);
+      font-weight:900;
+      font-family:'League Spartan',sans-serif;
+    }
+    .modal-close{
+      position:sticky;
+      top:0;
+      margin-left:auto;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:40px;height:40px;
+      border-radius:12px;
+      border:1px solid rgba(31,59,92,.15);
+      background:#fff;
+      cursor:pointer;
+      font-size:18px;
+      font-weight:900;
+      float:right;
+    }
+    .proposal{
+      border:1px solid rgba(31,59,92,.10);
+      border-radius:16px;
+      padding:16px;
+      margin:12px 0;
+      background:#fff;
+    }
+    .proposal h4{margin:0 0 8px 0;font-size:18px;color:#111827}
+    .proposal p{color:#6b7280;margin:0 0 10px 0;font-family:'IBM Plex Sans Hebrew',sans-serif}
+    .proposal .actions{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .mini-btn{
+      border:none;
+      background:var(--brand-blue-2);
+      color:#fff;
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:13px;
+    }
+    .mini-btn.outline{
+      background:#fff;
+      color:var(--brand-blue);
+      border:1px solid rgba(31,59,92,.18);
+    }
+
+    /* Inline mini-form inside modal */
+    .interest-form{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      border:1px dashed rgba(31,59,92,.20);
+      background:rgba(31,59,92,.03);
+      display:none;
+    }
+    .interest-form.show{display:block}
+    .interest-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:10px;
+    }
+    .interest-form label{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.2px;
+      color:rgba(31,59,92,.78);
+      display:block;
+      margin-bottom:6px;
+    }
+    .interest-form input, .interest-form textarea{
+      width:100%;
+      border:1px solid rgba(17,24,39,.14);
+      border-radius:14px;
+      padding:12px 12px;
+      font-size:14px;
+      font-family:'Inter',sans-serif;
+      background:#fff;
+    }
+    .interest-form textarea{grid-column:1 / -1; resize:vertical; min-height:88px}
+    .interest-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(31,59,92,.16);
+      background:#fff;
+      font-weight:900;
+      cursor:pointer;
+      color:var(--brand-blue);
+    }
+    .pill.primary{
+      background:var(--brand-blue);
+      color:#fff;
+      border-color:rgba(255,255,255,.12);
+    }
+
+    /* Popup */
+    .success-popup{
+      position:fixed;
+      top:16px; right:16px;
+      background:#fff;
+      border-left:6px solid var(--brand-blue-2);
+      padding:14px 16px;
+      border-radius:16px;
+      box-shadow:0 16px 40px rgba(0,0,0,.18);
+      max-width:360px;
+      opacity:0;
+      transform:translateY(-12px);
+      pointer-events:none;
+      transition:all .35s ease;
+      z-index:10000;
+      font-weight:900;
+    }
+    .success-popup.show{opacity:1;transform:translateY(0);pointer-events:auto}
+
+    /* =========================
+       OFFSET for anchored scroll
+       ========================= */
+    section{scroll-margin-top: var(--sticky-offset);}
+
+    /* =========================
+       RESPONSIVE
+       ========================= */
+    @media(max-width:1100px){
+      .highlights-grid{grid-template-columns:1fr;}
+      .interest-grid{grid-template-columns:1fr;}
+    }
+
+    @media(max-width:980px){
+      /* MÓVIL: más espacio entre servicios para que no colapse el botón */
+      .grid-3{grid-template-columns:1fr; gap:44px;}
+      .steps{grid-template-columns:repeat(2,1fr)}
+      section{padding:64px 0}
+      .hero{grid-template-columns:1fr; gap:22px}
+      .hero-visual{min-height:auto}
     }
 
     @media(max-width:900px){
-      .hero{grid-template-columns:1fr}
-      .hero h2{font-size:34px}
-    }
-      /* Popup confirmación */
-    .success-popup{
-      position:fixed;
-      top:20px;
-      right:20px;
-      background:white;
-      border-left:6px solid var(--secondary);
-      padding:20px 24px;
-      border-radius:12px;
-      box-shadow:0 10px 30px rgba(0,0,0,.15);
-      max-width:320px;
-      opacity:0;
-      transform:translateY(-20px);
-      pointer-events:none;
-      transition:all 1.5s ease;
-      z-index:9999;
-    }
+      /* móvil: ocultar marca en la barra fija (solo botón menú) */
+      .brand{display:none}
 
-    .success-popup.show{
-      opacity:1;
-      transform:translateY(0);
-      pointer-events:auto;
-    }
+      /* oculto zócalo arriba en móvil */
+      .topbar{display:none}
 
-    .success-popup p{
-      font-size:14px;
-      color:#1f2933;
-      margin-right:20px;
-    }
+      /* in mobile, keep sticky shell but nav tighter */
+      .nav-row{padding:10px 16px}
+      .brand h1{font-size:18px}
+      .nav-links{display:none}
+      .hamburger{display:inline-flex}
 
-    .success-popup button{
-      position:absolute;
-      top:8px;
-      right:10px;
-      background:none;
-      border:none;
-      font-size:18px;
-      cursor:pointer;
-      color:#6b7280;
+      header{padding:22px 0 44px}
+
+      .hero-main-title{font-size:42px}
+      .hero-subtitle{font-size:16.5px}
+      .hero-desc{font-size:15.8px;max-width:none}
+
+      .buttons{flex-direction:column;align-items:stretch}
+      .btn{width:100%}
+
+      .card{padding:26px 22px}
+      .card h4{font-size:21px}
+      .card p{font-size:15px}
+
+      .modal-content{border-radius:18px;max-height:90vh;padding:18px}
+
+      /* mostrar info abajo en móvil */
+      .mobile-bottom-info{display:block}
+
+      /* PC highlights NO, móvil mantiene tarjetitas en header */
+      .highlights{display:none}
+      .hero-visual{display:block}
+
+      /* CTA hidden on very small screens to reduce clutter */
+      .cta-pill{display:none}
     }
 
-
-
-/* Tarjetas interactivas */
-.card.interactive{position:relative;padding-bottom:55px}
-.card-btn{
-  position:absolute;
-  bottom:-18px;
-  left:50%;
-  transform:translateX(-50%);
-  background:var(--secondary);
-  color:white;
-  border:none;
-  padding:8px 18px;
-  border-radius:20px;
-  font-size:13px;
-  cursor:pointer;
-  box-shadow:0 6px 15px rgba(0,0,0,.15)
-}
-
-/* Modal */
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.5);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  opacity:0;
-  pointer-events:none;
-  transition:opacity 1.5s ease;
-  z-index:9999
-}
-
-.modal.show{opacity:1;pointer-events:auto}
-
-.modal-content{
-      background:white;
-      border-radius:18px;
-      padding:26px 26px 22px 26px;
-      max-width:820px;
-      width:calc(100% - 32px);
-      max-height:80vh; /* scroll */
-      overflow-y:auto; /* scroll */
-      box-shadow:0 24px 60px rgba(0,0,0,.25);
-      transform:translateY(18px);
-      transition:all 1.5s ease;
+    /* PC: oculto tarjetitas del header y muestro highlights debajo */
+    @media(min-width:901px){
+      .hero-visual{display:none}
+      .highlights{display:block}
+      .hamburger{display:none}
+      .mobile-menu{display:none !important}
     }
-
-    .modal.small .modal-content{
-      max-width:520px;
-      max-height:80vh;
-      overflow-y:auto;
-    }{
-  background:white;
-  max-width:500px;
-  width:90%;
-  padding:30px;
-  border-radius:16px;
-  position:relative;
-  animation:scaleIn 1.5s ease
-}
-
-@keyframes scaleIn{
-  from{transform:scale(.9);opacity:0}
-  to{transform:scale(1);opacity:1}
-}
-
-.modal-content h3{margin-bottom:15px}
-
-.modal-content ul{margin-bottom:20px;padding-left:20px}
-.modal-content li{margin-bottom:8px}
-
-.modal-content .close{
-  position:absolute;
-  top:10px;
-  right:14px;
-  border:none;
-  background:none;
-  font-size:20px;
-  cursor:pointer
-}
-
-.modal-content .interest-btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:auto;
-  background:var(--secondary);
-  color:white;
-  border:none;
-  padding:10px 14px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:600;
-  font-size:14px;
-  box-shadow:0 10px 24px rgba(0,0,0,.12)
-}
-
-/* Cards dentro del modal */
-.proposal{
-  border:1px solid rgba(31,59,92,.10);
-  border-radius:14px;
-  padding:16px;
-  margin-bottom:12px;
-  background:#fff;
-}
-.proposal h4{margin:0 0 8px 0;font-size:18px}
-.proposal ul{margin:0 0 12px 0;padding-left:18px}
-.proposal li{margin:6px 0;color:#374151}
-.proposal .actions{display:flex;gap:10px;flex-wrap:wrap}
-
-/* Modal interés (mini) */
-.modal.small .modal-content{max-width:520px}
-.mini-form{margin-top:8px}
-.mini-form input,.mini-form textarea{
-  width:100%;
-  padding:12px;
-  margin-bottom:12px;
-  border:1px solid #d1d5db;
-  border-radius:10px;
-}
-.mini-form .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-@media(max-width:700px){.mini-form .row{grid-template-columns:1fr}}
-
-.mini-form .send{
-  width:100%;
-  padding:12px;
-  background:var(--primary);
-  color:white;
-  border:none;
-  border-radius:10px;
-  font-weight:700;
-  cursor:pointer;
-}
-.mini-form .send:disabled{opacity:.7;cursor:not-allowed}
-.mini-form .hint{font-size:12px;color:#6b7280;margin-top:8px}
-</style>
+  </style>
 </head>
+
 <body>
 
-<header>
-  <div class="container">
-
-    <nav>
-      <h1>DOCENTES BROWN | Consultora</h1>
-      <div>
-        <a href="#servicios">Servicios</a>
-        <a href="#metodologia">Metodología</a>
-        <a href="#nosotros">Nosotros</a>
-        <a href="#contacto">Contacto</a>
-      </div>
-    </nav>
-
-    <div class="hero">
-      <div>
-        <h2>Diseñamos proyectos educativos que diferencian tu institución</h2>
-        <p>Somos una red de especialistas que acompaña a escuelas privadas en procesos de innovación, formación y desarrollo institucional.</p>
-
-        <div class="buttons">
-          <a href="#contacto" class="btn-primary">Solicitar reunión</a>
-          <a href="dossier.pdf" id="btnDossier" class="btn-outline" target="_blank">Descargar dossier</a>
+  <!-- Sticky: topbar + nav (PC) -->
+  <div class="sticky-shell" id="stickyShell">
+    <div class="topbar" aria-label="Zócalo superior">
+      <div class="topbar-inner">
+        <div class="topbar-left">Consultora Educativa</div>
+        <div class="topbar-right">
+          <span>Email: <a href="mailto:docentesbrown-oficial@gmail.com">docentesbrown-oficial@gmail.com</a></span>
+          <span>WhatsApp: <a href="https://wa.me/5491153196358" target="_blank" rel="noopener">+54 9 11 5319-6358</a></span>
+          <span>IG: <a href="https://instagram.com/docentesbrown.ce" target="_blank" rel="noopener">@docentesbrown.ce</a></span>
         </div>
       </div>
     </div>
 
-  </div>
-</header>
+    <div class="nav-bar" aria-label="Barra de navegación">
+      <div class="nav-row">
+        <div class="brand">
+          <h1>DOCENTES BROWN | Consultora Educativa</h1>
+        </div>
 
-<section id="servicios">
-  <div class="container">
+        <div class="nav-links" aria-label="Secciones">
+          <a href="#servicios" data-nav="servicios">Servicios</a>
+          <a href="#metodologia" data-nav="metodologia">Metodología</a>
+          <a href="#nosotros" data-nav="nosotros">Nosotros</a>
+        </div>
 
-    <div class="section-title">
-      <h3>Nuestros Servicios</h3>
-      <p>Diseñamos soluciones educativas integrales adaptadas a cada contexto institucional.</p>
-    </div>
+        <a class="cta-pill" href="#contacto" aria-label="Ir a Solicitar reunión">Solicitar reunión</a>
 
-    <div class="grid-3">
-
-      <div class="card interactive" data-type="programas">
-        <h4>Programas Extracurriculares</h4>
-        <p>Diseño curricular, perfiles docentes, materiales, evaluación y proyecto final.</p>
-        <button class="card-btn">Conocé nuestras propuestas</button>
+        <button class="hamburger" id="hamburger" type="button" aria-label="Abrir menú">
+          ☰ Menú
+        </button>
       </div>
 
-      <div class="card interactive" data-type="formacion">
-        <h4>Formación Institucional</h4>
-        <p>Capacitaciones situadas, jornadas pedagógicas y dispositivos de reflexión docente.</p>
-        <button class="card-btn">Conocé nuestras propuestas</button>
+      <div class="mobile-menu" id="mobileMenu" aria-label="Menú móvil">
+        <a href="#servicios">Servicios</a>
+        <a href="#metodologia">Metodología</a>
+        <a href="#nosotros">Nosotros</a>
+        <a href="#contacto">Solicitar reunión</a>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="container" style="position:relative; z-index:2;">
+      <div class="hero">
+        <div class="reveal d2">
+          <h1 class="hero-main-title">DOCENTES BROWN</h1>
+          <h2 class="hero-subtitle">Diseñamos proyectos educativos que diferencian a tu institución</h2>
+
+          <p class="hero-desc">
+            Somos una red de especialistas que acompaña a escuelas privadas en procesos de innovación,
+            formación y desarrollo institucional.
+          </p>
+
+          <div class="buttons">
+            <a href="#contacto" class="btn btn-primary">Solicitar reunión</a>
+            <a href="dossier.pdf" id="btnDossier" class="btn btn-outline" target="_blank" rel="noopener">Descargar dossier</a>
+          </div>
+        </div>
+
+        <!-- SOLO MÓVIL: tarjetitas dentro del header -->
+        <div class="hero-visual reveal d3" aria-label="Impacto y enfoque">
+          <div class="hero-cards">
+            <div class="hc">
+              <div class="eyebrow">FOCO</div>
+              <h4>Enfoque</h4>
+              <p>Acompañamiento situado: análisis real del contexto + diseño con el equipo directivo y docente.</p>
+              <div class="hc-badges">
+                <span class="badge">Diagnóstico</span>
+                <span class="badge">Diseño</span>
+                <span class="badge">Implementación</span>
+              </div>
+            </div>
+
+            <div class="hc">
+              <div class="eyebrow">RESULTADO</div>
+              <h4>Impacto</h4>
+              <p>Procesos sostenibles: mejoras concretas en enseñanza, gestión y experiencias de aprendizaje.</p>
+              <div class="hc-badges">
+                <span class="badge">Mejora continua</span>
+                <span class="badge">Trabajo en equipo</span>
+              </div>
+            </div>
+
+            <div class="hc">
+              <div class="eyebrow">ALCANCE</div>
+              <h4>Alcance</h4>
+              <p>Propuestas para escuelas de gestión privada, sin importar tamaño o características institucionales.</p>
+              <div class="hc-badges">
+                <span class="badge">Escalable</span>
+                <span class="badge">Personalizado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- SOLO PC: highlights editorial debajo del header -->
+  <section class="highlights" aria-label="Tarjetas destacadas">
+    <div class="container">
+      <div class="highlights-grid reveal d1">
+        <div class="highlight">
+          <div class="eyebrow">FOCO</div>
+          <h4>Enfoque</h4>
+          <p>Acompañamiento situado: análisis real del contexto + diseño con el equipo directivo y docente.</p>
+          <div class="highlight-badges">
+            <span class="badge">Diagnóstico</span>
+            <span class="badge">Diseño</span>
+            <span class="badge">Implementación</span>
+          </div>
+        </div>
+
+        <div class="highlight">
+          <div class="eyebrow">RESULTADO</div>
+          <h4>Impacto</h4>
+          <p>Procesos sostenibles: mejoras concretas en enseñanza, gestión y experiencias de aprendizaje.</p>
+          <div class="highlight-badges">
+            <span class="badge">Mejora continua</span>
+            <span class="badge">Trabajo en equipo</span>
+          </div>
+        </div>
+
+        <div class="highlight">
+          <div class="eyebrow">ALCANCE</div>
+          <h4>Alcance</h4>
+          <p>Propuestas para escuelas de gestión privada, sin importar tamaño o características institucionales.</p>
+          <div class="highlight-badges">
+            <span class="badge">Escalable</span>
+            <span class="badge">Personalizado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios">
+    <div class="container">
+      <div class="section-title reveal d1">
+        <h3>Nuestros Servicios</h3>
+        <p>Soluciones educativas integrales, diseñadas a medida del contexto institucional.</p>
       </div>
 
-      <div class="card">
-        <h4>Acompañamiento</h4>
-        <p>Monitoreo, seguimiento, informes y mejora continua de procesos educativos.</p>
+      <div class="grid-3">
+        <div class="card interactive reveal d2" data-type="programas">
+          <h4>Programas Extracurriculares</h4>
+          <p>Diseño curricular, perfiles docentes, materiales, evaluación y proyecto final.</p>
+          <button class="card-btn" type="button">Conocé nuestras propuestas</button>
+        </div>
+
+        <div class="card interactive reveal d3" data-type="formacion">
+          <h4>Formación Institucional</h4>
+          <p>Capacitaciones situadas, jornadas pedagógicas y dispositivos de reflexión docente.</p>
+          <button class="card-btn" type="button">Conocé nuestras propuestas</button>
+        </div>
+
+        <div class="card reveal d4">
+          <h4>Acompañamiento</h4>
+          <p>Monitoreo, seguimiento, informes y mejora continua de procesos educativos.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="metodologia" class="method">
+    <div class="container">
+      <div class="section-title reveal d1">
+        <h3>Nuestra Metodología</h3>
+        <p>Un proceso claro: diagnóstico, diseño, implementación y mejora continua.</p>
       </div>
 
+      <div class="steps">
+        <div class="step reveal d1"><span>1</span><p>Diagnóstico</p></div>
+        <div class="step reveal d2"><span>2</span><p>Diseño</p></div>
+        <div class="step reveal d3"><span>3</span><p>Equipos</p></div>
+        <div class="step reveal d4"><span>4</span><p>Implementación</p></div>
+        <div class="step reveal d2"><span>5</span><p>Seguimiento</p></div>
+        <div class="step reveal d3"><span>6</span><p>Evaluación</p></div>
+      </div>
     </div>
+  </section>
 
-  </div>
-</section>
-
-<section id="metodologia" class="method">
-  <div class="container">
-
-    <div class="section-title">
-      <h3>Nuestra Metodología</h3>
-      <p>Cada proyecto se desarrolla mediante un proceso estructurado y acompañado.</p>
+  <section id="nosotros" class="about">
+    <div class="container">
+      <div class="section-title reveal d1">
+        <h3>Nosotros</h3>
+      </div>
+      <p class="reveal d2">
+        Docentes Brown es una consultora educativa conformada por profesionales de la educación comprometidos con la mejora
+        de las prácticas institucionales y pedagógicas. Trabajamos acompañando a escuelas y equipos educativos en procesos
+        de transformación que buscan fortalecer la enseñanza, optimizar la gestión y promover experiencias de aprendizaje significativas.
+        <br><br>
+        Entendemos que cada institución tiene una identidad, una historia y desafíos propios. Por eso nuestro trabajo no se basa
+        en propuestas estandarizadas, sino en el acompañamiento situado, el análisis de necesidades reales y la construcción conjunta
+        de estrategias de mejora.
+      </p>
     </div>
+  </section>
 
-    <div class="steps">
+  <section id="contacto" class="contact">
+    <div class="container">
+      <div class="section-title reveal d1">
+        <h3>Contacto</h3>
+        <p>Todo proyecto empieza con una conversación.</p>
+      </div>
 
-      <div class="step"><span>1</span><p>Diagnóstico institucional</p></div>
-      <div class="step"><span>2</span><p>Diseño estratégico</p></div>
-      <div class="step"><span>3</span><p>Conformación de equipos</p></div>
-      <div class="step"><span>4</span><p>Implementación</p></div>
-      <div class="step"><span>5</span><p>Seguimiento</p></div>
-      <div class="step"><span>6</span><p>Evaluación y mejora</p></div>
-
-    </div>
-
-  </div>
-</section>
-
-<section id="nosotros" class="about">
-  <div class="container">
-
-    <div class="section-title">
-      <h3>Nosotros</h3>
-    </div>
-
-    <p>
-      Somos una red interdisciplinaria de profesionales de la educación con experiencia en docencia, gestión, formación e innovación institucional.
-      Nuestro trabajo surge de la trayectoria de Docentes Brown y se basa en la articulación entre teoría, práctica y contexto.
-    </p>
-
-  </div>
-</section>
-
-<section id="contacto" class="contact">
-  <div class="container">
-
-    <div class="section-title">
-      <h3>Contacto</h3>
-      <p>Cada proyecto comienza con una conversación.</p>
-    </div>
-
-    <form id="contactForm" action="https://formspree.io/f/mojlrgwb" method="POST">
-      <input type="text" name="nombre" placeholder="Nombre y Apellido" required>
-      <input type="text" name="institucion" placeholder="Institución" required>
-      <input type="text" name="cargo" placeholder="Cargo" required>
-      <input type="email" name="email" placeholder="Email" required>
-      <textarea name="mensaje" rows="4" placeholder="Consulta"></textarea>
-      <input type="hidden" name="_subject" value="Nueva consulta desde la web - Docentes Brown">
-      <button type="submit">Enviar consulta</button>
-    </form>
-
-  </div>
-</section>
-
-<footer>
-  <p>© 2026 Docentes Brown - Consultora Educativa | Todos los derechos reservados</p>
-</footer>
-
-<!-- Modal Propuestas -->
-<div id="modal" class="modal" aria-hidden="true">
-  <div class="modal-content">
-    <button class="close" type="button" aria-label="Cerrar">×</button>
-    <h3 id="modalTitle"></h3>
-    <div id="modalList"></div>
-  </div>
-</div>
-
-<!-- Modal interés (envío de mail) -->
-<div id="interestModal" class="modal small" aria-hidden="true">
-  <div class="modal-content">
-    <button class="close" type="button" aria-label="Cerrar">×</button>
-    <h3 id="interestTitle">Me interesa</h3>
-    <p style="color:#6b7280;margin-bottom:12px">Dejanos tus datos y te enviamos una propuesta institucional.</p>
-
-    <form id="interestForm" class="mini-form" action="https://formspree.io/f/mojlrgwb" method="POST">
-      <input type="hidden" name="_subject" value="Nueva consulta por propuesta - Docentes Brown Consultora">
-      <input type="hidden" name="propuesta" id="interestProposal" value="">
-
-      <div class="row">
+      <form id="contactForm" action="https://formspree.io/f/mojlrgwb" method="POST" class="reveal d2">
         <input type="text" name="nombre" placeholder="Nombre y Apellido" required>
         <input type="text" name="institucion" placeholder="Institución" required>
-      </div>
-      <div class="row">
+        <input type="text" name="cargo" placeholder="Cargo" required>
         <input type="email" name="email" placeholder="Email" required>
-        <input type="text" name="whatsapp" placeholder="WhatsApp (opcional)">
+        <textarea name="mensaje" rows="4" placeholder="Consulta (opcional)"></textarea>
+        <button type="submit">Enviar consulta</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 Docentes Brown - Consultora Educativa | Todos los derechos reservados</p>
+
+      <div class="mobile-bottom-info" aria-label="Información de contacto (móvil)">
+        <h4>Contacto institucional</h4>
+        <div class="quick-actions">
+          <a class="qa" href="https://wa.me/5491153196358" target="_blank" rel="noopener">
+            <span>WhatsApp</span>
+            <small>+54 9 11 5319-6358</small>
+          </a>
+          <a class="qa" href="mailto:docentesbrown-oficial@gmail.com">
+            <span>Email</span>
+            <small>docentesbrown-oficial@gmail.com</small>
+          </a>
+          <a class="qa" href="https://instagram.com/docentesbrown.ce" target="_blank" rel="noopener">
+            <span>Instagram</span>
+            <small>@docentesbrown.ce</small>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL propuestas + mini formulario -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Cerrar">×</button>
+      <div class="modal-title" id="modalTitle"></div>
+      <div id="modalList"></div>
+
+      <div id="interestFormWrap" class="interest-form" aria-label="Formulario de interés">
+        <div style="font-weight:900; color: var(--brand-blue);">Te interesa esta propuesta</div>
+        <div style="font-size:13px; color: rgba(31,59,92,.78); margin-top:4px;">
+          Completá estos datos y te respondemos a la brevedad.
+        </div>
+
+        <form id="interestForm" action="https://formspree.io/f/mojlrgwb" method="POST">
+          <input type="hidden" name="origen" value="Mini formulario (Propuestas)">
+          <input type="hidden" name="propuesta" id="interestProposal" value="">
+
+          <div class="interest-grid">
+            <div>
+              <label>Nombre y Apellido</label>
+              <input name="nombre" required placeholder="Tu nombre" />
+            </div>
+            <div>
+              <label>Institución</label>
+              <input name="institucion" required placeholder="Nombre de la institución" />
+            </div>
+            <div>
+              <label>Cargo</label>
+              <input name="cargo" required placeholder="Ej: Directivo / Coordinación" />
+            </div>
+            <div>
+              <label>Email</label>
+              <input name="email" type="email" required placeholder="tu@email.com" />
+            </div>
+            <div style="grid-column:1 / -1">
+              <label>Mensaje</label>
+              <textarea name="mensaje" id="interestMessage" placeholder="Contanos qué necesitás (opcional)"></textarea>
+            </div>
+          </div>
+
+          <div class="interest-actions">
+            <button class="pill primary" type="submit">Enviar</button>
+            <button class="pill" id="interestCancel" type="button">Cancelar</button>
+          </div>
+        </form>
       </div>
 
-      <textarea name="mensaje" rows="4" placeholder="Contanos brevemente qué nivel/es (Inicial/Primaria/Secundaria) y qué objetivo tienen."></textarea>
-
-      <button class="send" type="submit">Enviar</button>
-      <div class="hint">Respuesta estimada: dentro de las 24 hs hábiles.</div>
-    </form>
+    </div>
   </div>
-</div>
 
-<!-- Popup confirmación -->
-<div id="successPopup" class="success-popup">
-  <button id="closePopup">×</button>
-  <p>¡Gracias por contactarnos! Te responderemos dentro de las 24 hs hábiles.</p>
-</div>
+  <div id="successPopup" class="success-popup">¡Gracias! Te responderemos pronto.</div>
 
-<script>
-  // =========================
-  // ✅ Envío de formularios (Contact + Interés) con popup
-  // =========================
-  const contactForm = document.getElementById('contactForm');
-  const interestForm = document.getElementById('interestForm');
-
-  const popup = document.getElementById('successPopup');
-  const closePopupBtn = document.getElementById('closePopup');
-
-  function showSuccessPopup(){
-    popup.classList.add('show');
-    setTimeout(()=> popup.classList.remove('show'), 8000);
-  }
-  closePopupBtn.addEventListener('click', ()=> popup.classList.remove('show'));
-
-  async function submitFormAjax(formEl){
-    const btn = formEl.querySelector('button[type="submit"]');
-    const original = btn ? btn.textContent : '';
-    if(btn){ btn.disabled = true; btn.textContent = 'Enviando...'; }
-
-    try{
-      const res = await fetch(formEl.action, {
-        method: 'POST',
-        body: new FormData(formEl),
-        headers: { 'Accept': 'application/json' }
-      });
-
-      if(res.ok){
-        formEl.reset();
-        showSuccessPopup();
-        return true;
-      } else {
-        alert('No se pudo enviar el formulario. Intente nuevamente.');
-        return false;
-      }
-    } catch(err){
-      console.error(err);
-      alert('Error de conexión. Intente más tarde.');
-      return false;
-    } finally {
-      if(btn){ btn.disabled = false; btn.textContent = original; }
+  <script>
+    /* =========================
+       Sticky offset -> keeps anchors correct
+       ========================= */
+    const stickyShell = document.getElementById('stickyShell');
+    function updateStickyOffset(){
+      if (!stickyShell) return;
+      const h = stickyShell.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--sticky-offset', Math.ceil(h + 16) + 'px');
     }
-  }
+    window.addEventListener('resize', updateStickyOffset, {passive:true});
+    window.addEventListener('load', updateStickyOffset, {passive:true});
+    updateStickyOffset();
 
-  if(contactForm){
-    contactForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      await submitFormAjax(contactForm);
-    });
-  }
+    /* =========================
+       Mobile menu
+       ========================= */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
 
-  // =========================
-  // ✅ Modales de propuestas + modal "Me interesa"
-  // =========================
-  const modal = document.getElementById('modal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalList = document.getElementById('modalList');
-  const modalClose = modal.querySelector('.close');
-
-  const interestModal = document.getElementById('interestModal');
-  const interestClose = interestModal.querySelector('.close');
-  const interestTitle = document.getElementById('interestTitle');
-  const interestProposal = document.getElementById('interestProposal');
-
-  const proposals = {
-    programas: [
-      {
-        title: 'Robótica y Programación (Inicial/Primaria/Secundaria)',
-        items: ['Secuencia anual o cuatrimestral', 'Materiales y guías para docentes', 'Proyecto final + muestra institucional']
-      },
-      {
-        title: 'Laboratorio de Ciencias + Feria Científica',
-        items: ['Diseño por ejes y experiencias', 'Instrumentos de evaluación', 'Producto final para exposición']
-      },
-      {
-        title: 'Oratoria, Debate y Comunicación',
-        items: ['Entrenamiento progresivo', 'Rúbricas de desempeño', 'Torneo interno / muestra']
-      }
-    ],
-    formacion: [
-      {
-        title: 'Evaluación Formativa y Rúbricas (situada)',
-        items: ['Diseño de instrumentos', 'Retroalimentación efectiva', 'Acompañamiento en aula']
-      },
-      {
-        title: 'Gestión de Aula y Convivencia',
-        items: ['Acuerdos institucionales', 'Estrategias preventivas', 'Intervenciones con familias']
-      },
-      {
-        title: 'Innovación Didáctica con Tecnología',
-        items: ['Modelos de clase activa', 'Herramientas concretas', 'Plan de implementación institucional']
-      }
-    ]
-  };
-
-  function openModal(type){
-    modalTitle.textContent = type === 'programas' ? 'Programas Extracurriculares' : 'Formación Institucional';
-    modalList.innerHTML = '';
-
-    proposals[type].forEach(p => {
-      const wrap = document.createElement('div');
-      wrap.className = 'proposal';
-
-      const h4 = document.createElement('h4');
-      h4.textContent = p.title;
-
-      const ul = document.createElement('ul');
-      p.items.forEach(it => {
-        const li = document.createElement('li');
-        li.textContent = it;
-        ul.appendChild(li);
+    if (hamburger && mobileMenu) {
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.toggle('show');
+        hamburger.textContent = mobileMenu.classList.contains('show') ? '✕ Cerrar' : '☰ Menú';
       });
 
-      const actions = document.createElement('div');
-      actions.className = 'actions';
+      mobileMenu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          mobileMenu.classList.remove('show');
+          hamburger.textContent = '☰ Menú';
+        });
+      });
+    }
 
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'interest-btn';
-      btn.textContent = 'Me interesa';
-      btn.addEventListener('click', () => {
-        // Abre modal de interés con propuesta seleccionada
-        interestTitle.textContent = 'Me interesa: ' + p.title;
-        interestProposal.value = p.title;
-        interestModal.classList.add('show');
-        interestModal.setAttribute('aria-hidden', 'false');
+    /* =========================
+       Active section underline (desktop)
+       ========================= */
+    const navLinks = Array.from(document.querySelectorAll('.nav-links a[data-nav]'));
+    const sectionIds = navLinks.map(a => a.getAttribute('data-nav'));
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    function setActive(id){
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('data-nav') === id));
+    }
+
+    if ('IntersectionObserver' in window && sections.length) {
+      const io = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible && visible.target && visible.target.id) setActive(visible.target.id);
+      }, { root: null, threshold: [0.2, 0.35, 0.5], rootMargin: "-10% 0px -70% 0px" });
+
+      sections.forEach(s => io.observe(s));
+      setActive(sections[0].id);
+    }
+
+    /* =========================
+       Dossier: abre nueva pestaña
+       ========================= */
+    const btnDossier = document.getElementById('btnDossier');
+    if (btnDossier) {
+      btnDossier.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.open('dossier.pdf', '_blank');
+      });
+    }
+
+    /* =========================
+       Formspree submit helpers
+       ========================= */
+    const popup = document.getElementById('successPopup');
+
+    async function submitFormAjax(formEl){
+      try {
+        const res = await fetch(formEl.action, {
+          method: 'POST',
+          body: new FormData(formEl),
+          headers: { 'Accept': 'application/json' }
+        });
+        if(res.ok){
+          formEl.reset();
+          popup.textContent = "¡Gracias! Te responderemos pronto.";
+          popup.classList.add('show');
+          setTimeout(()=> popup.classList.remove('show'), 4200);
+          return true;
+        } else {
+          popup.textContent = "Ups, no pudimos enviar. Probá de nuevo.";
+          popup.classList.add('show');
+          setTimeout(()=> popup.classList.remove('show'), 4200);
+        }
+      } catch(err) {
+        console.error(err);
+        popup.textContent = "Error de conexión. Probá de nuevo.";
+        popup.classList.add('show');
+        setTimeout(()=> popup.classList.remove('show'), 4200);
+      }
+      return false;
+    }
+
+    // Main contact form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await submitFormAjax(contactForm);
+      });
+    }
+
+    /* =========================
+       Propuestas + Modal + Mini formulario
+       ========================= */
+    const proposals = {
+      programas: [
+        { title: 'Robótica y Programación', desc: 'Secuencias por niveles + proyecto integrador.' },
+        { title: 'Laboratorio de Ciencias', desc: 'Experiencias prácticas, registros y comunicación científica.' },
+        { title: 'Oratoria y Debate', desc: 'Argumentación, expresión oral y torneos internos.' }
+      ],
+      formacion: [
+        { title: 'Evaluación Formativa', desc: 'Instrumentos, retroalimentación y acuerdos institucionales.' },
+        { title: 'Gestión de Aula', desc: 'Clima escolar, rutinas, convivencia y estrategias didácticas.' },
+        { title: 'Planificación con foco en aprendizajes', desc: 'Secuenciación, criterios y seguimiento.' }
+      ]
+    };
+
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalList = document.getElementById('modalList');
+    const modalClose = document.getElementById('modalClose');
+
+    const interestWrap = document.getElementById('interestFormWrap');
+    const interestForm = document.getElementById('interestForm');
+    const interestCancel = document.getElementById('interestCancel');
+    const interestProposal = document.getElementById('interestProposal');
+    const interestMessage = document.getElementById('interestMessage');
+
+    function closeInterest(){
+      interestWrap.classList.remove('show');
+      interestProposal.value = '';
+      if (interestMessage) interestMessage.value = '';
+    }
+
+    function openInterest(propuestaTitulo){
+      interestProposal.value = propuestaTitulo;
+      if (interestMessage) interestMessage.value = `Me interesa recibir información sobre: ${propuestaTitulo}.`;
+      interestWrap.classList.add('show');
+      interestWrap.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    function openModal(type){
+      modalTitle.textContent = type === 'programas'
+        ? 'Programas Extracurriculares (vigentes)'
+        : 'Formación Institucional (vigente)';
+
+      modalList.innerHTML = '';
+      closeInterest();
+
+      proposals[type].forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'proposal';
+        div.innerHTML = `
+          <h4>${p.title}</h4>
+          <p>${p.desc || ''}</p>
+          <div class="actions">
+            <button class="mini-btn" type="button" data-interest="${p.title}">Me interesa</button>
+            <button class="mini-btn outline" type="button" data-close>Volver</button>
+          </div>
+        `;
+        modalList.appendChild(div);
       });
 
-      actions.appendChild(btn);
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
 
-      wrap.appendChild(h4);
-      wrap.appendChild(ul);
-      wrap.appendChild(actions);
+    function closeModal(){
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      closeInterest();
+    }
 
-      modalList.appendChild(wrap);
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modal) modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
     });
 
-    modal.classList.add('show');
-    modal.setAttribute('aria-hidden', 'false');
-  }
+    document.querySelectorAll('.card.interactive').forEach(card => {
+      const btn = card.querySelector('.card-btn');
+      if (!btn) return;
+      btn.addEventListener('click', () => openModal(card.dataset.type));
+    });
 
-  modalClose.addEventListener('click', ()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden', 'true'); });
-  modal.addEventListener('click', e=>{ if(e.target===modal){ modal.classList.remove('show'); modal.setAttribute('aria-hidden', 'true'); } });
+    modalList.addEventListener('click', (e) => {
+      const interestBtn = e.target.closest('[data-interest]');
+      const closeBtn = e.target.closest('[data-close]');
 
-  // Cerrar modal interés
-  interestClose.addEventListener('click', ()=>{ interestModal.classList.remove('show'); interestModal.setAttribute('aria-hidden', 'true'); });
-  interestModal.addEventListener('click', e=>{ if(e.target===interestModal){ interestModal.classList.remove('show'); interestModal.setAttribute('aria-hidden', 'true'); } });
+      if (closeBtn) return closeModal();
 
-  // Enviar formulario interés por AJAX y cerrar modal
-  if(interestForm){
-    interestForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const ok = await submitFormAjax(interestForm);
-      if(ok){
-        interestModal.classList.remove('show');
-        interestModal.setAttribute('aria-hidden', 'true');
-        modal.classList.remove('show');
-        modal.setAttribute('aria-hidden', 'true');
+      if (interestBtn) {
+        const tema = interestBtn.getAttribute('data-interest');
+        openInterest(tema);
       }
     });
-  }
 
-  // Botones de tarjetas
-  document.querySelectorAll('.card.interactive').forEach(card=>{
-    const btn = card.querySelector('.card-btn');
-    btn.addEventListener('click', ()=> openModal(card.dataset.type));
-  });
+    if (interestCancel) {
+      interestCancel.addEventListener('click', () => closeInterest());
+    }
 
-</script>
+    if (interestForm) {
+      interestForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const ok = await submitFormAjax(interestForm);
+        if (ok) closeModal();
+      });
+    }
 
-<script>
-  // Botón dossier: abre en nueva pestaña + descarga automática
-  const btnDossier = document.getElementById('btnDossier');
-
-  if(btnDossier){
-    btnDossier.addEventListener('click', function(e){
-      e.preventDefault();
-
-      const pdfUrl = 'dossier.pdf';
-
-      // 1) Abrir el PDF en una nueva pestaña
-      window.open(pdfUrl, '_blank');
-
-      // 2) Forzar descarga
-      const link = document.createElement('a');
-      link.href = pdfUrl;
-      link.download = 'Dossier-Docentes-Brown.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
     });
-  }
-</script>
+  </script>
 
 </body>
 </html>
