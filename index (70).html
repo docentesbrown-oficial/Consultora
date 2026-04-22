@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Docentes Brown | Consultora Educativa</title>
+
+  <!-- Performance: faster font loading -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=League+Spartan:wght@400;500;600;700;800&family=IBM+Plex+Sans+Hebrew:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================
+       BASE
+       ========================= */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:#f6f8fb;
+      color:#1f2933;
+      line-height:1.6;
+      font-family:'Inter',sans-serif;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    :root{
+      --brand-blue:#1f3b5c;
+      --brand-blue-2:#4d7fb8;
+      --brand-cream:#f3efdc;
+      --text:#1f2933;
+      --muted:#6b7280;
+      --surface:#ffffff;
+      --shadow:0 12px 34px rgba(0,0,0,.10);
+      --shadow-soft:0 10px 26px rgba(0,0,0,.08);
+      --radius:18px;
+      --hairline:rgba(31,59,92,.12);
+      --focus:rgba(77,127,184,.22);
+      --sticky-offset: 116px; /* fallback; updated via JS */
+    }
+
+    .container{max-width:1200px;margin:auto;padding:0 20px}
+
+    /* =========================
+       TIPOGRAFÍA (REQUISITO)
+       H1: League Spartan
+       H2: League Spartan (más chico)
+       H3: IBM Plex Sans Hebrew
+       ========================= */
+    h1{
+      font-family:'League Spartan',sans-serif;
+      letter-spacing:.3px;
+      font-weight:900;
+    }
+    h2{
+      font-family:'League Spartan',sans-serif;
+      letter-spacing:.25px;
+      font-weight:800;
+    }
+    h3{
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+      letter-spacing:.1px;
+      font-weight:700;
+    }
+    h4{
+      font-family:'League Spartan',sans-serif;
+      letter-spacing:.2px;
+      font-weight:800;
+    }
+
+    /* =========================
+       ACCESSIBILITY / FOCUS
+       ========================= */
+    a, button, input, textarea { -webkit-tap-highlight-color: transparent; }
+    :focus-visible{
+      outline:none;
+      box-shadow:0 0 0 4px var(--focus);
+      border-radius:12px;
+    }
+
+    /* =========================
+       ANIMACIONES SUAVES (desktop first)
+       ========================= */
+    @media (prefers-reduced-motion: no-preference) and (min-width: 901px){
+      .reveal{
+        opacity:0;
+        transform:translateY(10px);
+        filter:blur(6px);
+        animation:reveal .7s ease-out forwards;
+        will-change:opacity,transform,filter;
+      }
+      .reveal.d1{animation-delay:.08s}
+      .reveal.d2{animation-delay:.18s}
+      .reveal.d3{animation-delay:.28s}
+      .reveal.d4{animation-delay:.38s}
+      @keyframes reveal{
+        to{opacity:1;transform:translateY(0);filter:blur(0)}
+      }
+    }
+
+    /* =========================
+       STICKY SHELL (TOPBAR + NAV)
+       ========================= */
+    .sticky-shell{
+      position:sticky;
+      top:0;
+      z-index:1000;
+      /* subtle separation from content */
+      box-shadow:0 10px 30px rgba(0,0,0,.06);
+    }
+
+    /* =========================
+       ZÓCALO SUPERIOR (FULL WIDTH) - PC ONLY
+       ========================= */
+    .topbar{
+      width:100%;
+      background:var(--brand-cream);
+      color:var(--brand-blue);
+      border-bottom:1px solid var(--hairline);
+    }
+    .topbar-inner{
+      max-width:1200px;
+      margin:auto;
+      padding:0 20px;
+      display:grid;
+      grid-template-columns:auto minmax(0, 1fr);
+      align-items:center;
+      gap:18px;
+      min-height:42px;
+      overflow:hidden;
+    }
+    .topbar-left{
+      font-weight:900;
+      font-size:12px;
+      letter-spacing:.6px;
+      text-transform:uppercase;
+      color:var(--brand-blue);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .topbar-right{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+      gap:16px;
+      font-size:13px;
+      font-weight:700;
+      color:var(--brand-blue);
+    }
+    .topbar a{
+      color:var(--brand-blue);
+      text-decoration:none;
+      border-bottom:1px solid rgba(31,59,92,.25);
+    }
+    .topbar a:hover{opacity:.86}
+
+    .topbar-ticker{
+      overflow:hidden;
+      min-width:0;
+      white-space:nowrap;
+      color:var(--brand-blue);
+      font-size:13px;
+      font-weight:800;
+    }
+    .topbar-track{
+      display:inline-flex;
+      align-items:center;
+      gap:34px;
+      min-width:max-content;
+      will-change:transform;
+      animation:topbarMarquee 48s linear infinite;
+    }
+    .topbar-track span{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+    }
+    @keyframes topbarMarquee{
+      from{transform:translateX(0)}
+      to{transform:translateX(-50%)}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .topbar-track{animation:none; transform:none;}
+    }
+
+    /* =========================
+       NAV BAR (below topbar)
+       ========================= */
+    .nav-bar{
+      width:100%;
+      background:rgba(19,44,71,.70);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .nav-row{
+      max-width:1200px;
+      margin:auto;
+      padding:12px 20px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .brand h1{font-size:20px;color:#fff}
+
+    .nav-links{
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+    .nav-links a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:800;
+      opacity:.92;
+      position:relative;
+      padding:6px 2px;
+    }
+    .nav-links a:hover{opacity:1}
+    .nav-links a.active::after{
+      content:"";
+      position:absolute;
+      left:2px; right:2px; bottom:0;
+      height:2px;
+      background:rgba(243,239,220,.92);
+      border-radius:999px;
+    }
+
+    .cta-pill{
+      display:inline-flex;
+      text-decoration:none;
+      font-weight:900;
+      color:#0b1220;
+      background:rgba(243,239,220,.92);
+      border:1px solid rgba(255,255,255,.18);
+      padding:10px 12px;
+      border-radius:999px;
+      white-space:nowrap;
+      transition:transform .15s ease, opacity .15s ease;
+    }
+    .cta-pill:hover{opacity:.95}
+    .cta-pill:active{transform:scale(.985)}
+
+    /* Mobile nav */
+    .hamburger{
+      display:none;
+      border:1px solid rgba(255,255,255,.22);
+      background:rgba(255,255,255,.08);
+      color:#fff;
+      border-radius:12px;
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:900;
+    }
+    .mobile-menu{
+      display:none;
+      padding:12px 20px 14px;
+      background:rgba(19,44,71,.82);
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .mobile-menu a{
+      display:block;
+      padding:10px 6px;
+      color:#fff;
+      text-decoration:none;
+      font-weight:900;
+      opacity:.95;
+    }
+    .mobile-menu a + a{border-top:1px solid rgba(255,255,255,.10)}
+    .mobile-menu a:hover{opacity:1}
+    .mobile-menu.show{display:block}
+
+    /* =========================
+       HEADER PREMIUM
+       ========================= */
+    header{
+      position:relative;
+      color:#fff;
+      padding:36px 0 72px;
+      background:
+        radial-gradient(900px 420px at 18% 20%, rgba(77,127,184,.32), transparent 60%),
+        radial-gradient(700px 360px at 86% 36%, rgba(255,255,255,.10), transparent 62%),
+        linear-gradient(160deg, #132c47 0%, var(--brand-blue) 44%, #0f2238 100%);
+      overflow:hidden;
+    }
+
+    /* grain only on desktop (performance) */
+    @media(min-width:901px){
+      header::after{
+        content:"";
+        position:absolute; inset:0;
+        background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E");
+        mix-blend-mode:soft-light;
+        opacity:.32;
+        pointer-events:none;
+      }
+    }
+
+    /* HERO */
+    .hero{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:44px;
+      align-items:stretch;
+    }
+    .hero-main-title{
+      font-size:clamp(34px,4.8vw,68px);
+      line-height:1;
+      margin-bottom:10px;
+      text-transform:uppercase;
+    }
+    .hero-subtitle{
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+      font-size:18px;
+      font-weight:650;
+      color:#e6edf7;
+      margin-bottom:18px;
+      max-width:60ch;
+    }
+    .hero-desc{
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+      font-size:16.8px;
+      color:#d1d9e6;
+      margin-bottom:26px;
+      max-width:58ch;
+    }
+
+    .buttons{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 18px;
+      border-radius:14px;
+      text-decoration:none;
+      font-weight:900;
+      letter-spacing:.15px;
+      transition:transform .15s ease, opacity .15s ease, background .15s ease, box-shadow .15s ease;
+      user-select:none;
+    }
+    .btn:active{transform:scale(.98)}
+    .btn-primary{
+      background:var(--brand-blue-2);
+      color:#fff;
+      box-shadow:0 16px 44px rgba(77,127,184,.22);
+    }
+    .btn-primary:hover{background:#3f74af}
+    .btn-outline{
+      border:2px solid rgba(255,255,255,.88);
+      color:#fff;
+      background:transparent;
+    }
+    .btn-outline:hover{opacity:.92}
+
+    /* HERO VISUAL (solo móvil; en PC lo movemos afuera del header) */
+    .hero-visual{
+      border-radius:24px;
+      background:rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 22px 60px rgba(0,0,0,.20);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+      min-height:320px;
+    }
+    .hero-visual::before{
+      content:"";
+      position:absolute;
+      width:520px;height:520px;
+      left:-220px; top:-240px;
+      background:radial-gradient(circle at center, rgba(77,127,184,.38), transparent 62%);
+      filter:blur(2px);
+    }
+    .hero-visual::after{
+      content:"";
+      position:absolute;
+      width:420px;height:420px;
+      right:-220px; bottom:-250px;
+      background:radial-gradient(circle at center, rgba(243,239,220,.18), transparent 60%);
+    }
+    .hero-cards{
+      position:relative;
+      display:grid;
+      gap:12px;
+    }
+    .hc{
+      background:rgba(255,255,255,.10);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:18px;
+      padding:14px 14px;
+      backdrop-filter: blur(6px);
+    }
+    .hc .eyebrow{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.7px;
+      text-transform:uppercase;
+      color:rgba(243,239,220,.92);
+      margin-bottom:6px;
+    }
+    .hc h4{color:#fff;font-size:18px;margin-bottom:6px}
+    .hc p{color:#dbe5f3;font-size:14.5px;font-family:'IBM Plex Sans Hebrew',sans-serif}
+    .hc-badges{
+      display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;
+    }
+    .badge{
+      font-size:12px;
+      font-weight:900;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.08);
+      padding:8px 10px;
+      border-radius:999px;
+      letter-spacing:.2px;
+    }
+
+    /* =========================
+       HIGHLIGHTS (PC: editorial cards)
+       ========================= */
+    .highlights{
+      padding:54px 0 0;
+      background:#f6f8fb;
+    }
+    .highlights-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:18px;
+      margin-top:0;
+      align-items:stretch;
+    }
+    .highlight{
+      background:#fff;
+      border:1px solid rgba(17,24,39,.06);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      padding:18px 18px;
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      height:100%;
+      min-height:228px;
+    }
+    .highlight::after{
+      content:"";
+      position:absolute;
+      top:0; left:0; right:0;
+      height:4px;
+      background:linear-gradient(90deg, var(--brand-blue-2), rgba(77,127,184,.18));
+    }
+    .highlight .eyebrow{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.7px;
+      text-transform:uppercase;
+      color:rgba(31,59,92,.68);
+      margin-bottom:6px;
+    }
+    .highlight h4{
+      color:var(--brand-blue);
+      font-size:20px;
+      margin-bottom:6px;
+    }
+    .highlight p{
+      color:var(--muted);
+      font-size:14.8px;
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+      margin-bottom:12px;
+    }
+    .highlight-badges{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:auto;
+    }
+    .highlight-badges .badge{
+      color:var(--brand-blue);
+      background:rgba(31,59,92,.06);
+      border:1px solid rgba(31,59,92,.12);
+    }
+
+    /* =========================
+       SECCIONES
+       ========================= */
+    section{padding:78px 0}
+    .section-title{
+      text-align:center;
+      max-width:760px;
+      margin:0 auto 54px;
+      padding:0 8px;
+    }
+    .section-title h3{font-size:22px;margin-bottom:10px;color:var(--brand-blue)}
+    .section-title p{color:var(--muted);font-size:16px}
+
+    .grid-3{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+      gap:24px;
+    }
+    .services-grid{
+      grid-template-columns:repeat(4, minmax(0,1fr));
+    }
+
+    .card{
+      background:var(--surface);
+      padding:30px 26px;
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:visible;
+      border:1px solid rgba(17,24,39,.06);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    @media (hover:hover){
+      .card:hover{
+        transform:translateY(-2px);
+        box-shadow:0 18px 44px rgba(0,0,0,.12);
+      }
+    }
+    .card h4{margin-bottom:10px;font-size:22px;color:#0f172a}
+    .card p{color:var(--muted);font-size:15.5px}
+
+    /* Card CTA */
+    .card.interactive{padding-bottom:60px}
+    .card-btn{
+      position:absolute;
+      left:50%;
+      bottom:-18px;
+      transform:translateX(-50%);
+      background:var(--brand-blue-2);
+      color:#fff;
+      border:none;
+      padding:10px 16px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:900;
+      cursor:pointer;
+      box-shadow:0 12px 28px rgba(0,0,0,.18);
+      white-space:nowrap;
+    }
+    .card-btn:hover{opacity:.92}
+
+    .notice-badge{
+      display:inline-flex;
+      align-items:center;
+      width:max-content;
+      max-width:100%;
+      padding:8px 10px;
+      margin:0 0 12px 0;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.25px;
+      color:var(--brand-blue);
+      background:rgba(31,59,92,.07);
+      border:1px solid rgba(31,59,92,.12);
+    }
+    .notice-badge.available{
+      color:#1f4f38;
+      background:#e3f3e9;
+      border-color:#b8dcc5;
+    }
+    .price-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:12px;
+      margin:14px 0 6px;
+    }
+    .price-card{
+      border:1px solid rgba(31,59,92,.12);
+      border-radius:16px;
+      padding:14px;
+      background:rgba(31,59,92,.035);
+    }
+    .price-card strong{
+      display:block;
+      color:var(--brand-blue);
+      font-size:17px;
+      margin-bottom:4px;
+      font-family:'League Spartan',sans-serif;
+    }
+    .price-card span{
+      display:block;
+      color:#111827;
+      font-size:22px;
+      font-weight:900;
+      margin-bottom:6px;
+    }
+    .price-card p{
+      font-size:14px;
+      color:#6b7280;
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+    }
+
+    /* =========================
+       ACCESO A APPS DOCENTES BROWN
+       ========================= */
+    .apps-section{
+      background:linear-gradient(180deg, #f6f8fb 0%, #eef3f9 100%);
+      padding-top:64px;
+    }
+    .apps-access-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:28px;
+      background:
+        radial-gradient(520px 260px at 12% 10%, rgba(77,127,184,.18), transparent 62%),
+        linear-gradient(135deg, #ffffff 0%, #f8fafc 58%, #eef3f9 100%);
+      border:1px solid rgba(31,59,92,.10);
+      box-shadow:var(--shadow);
+      padding:34px;
+      display:grid;
+      grid-template-columns:1.08fr .92fr;
+      gap:28px;
+      align-items:center;
+    }
+    .apps-access-card::after{
+      content:"";
+      position:absolute;
+      width:360px;
+      height:360px;
+      right:-170px;
+      bottom:-210px;
+      background:radial-gradient(circle at center, rgba(31,59,92,.14), transparent 64%);
+      pointer-events:none;
+    }
+    .apps-copy{position:relative;z-index:2}
+    .apps-kicker{
+      display:inline-flex;
+      align-items:center;
+      width:max-content;
+      max-width:100%;
+      padding:8px 11px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+      color:var(--brand-blue);
+      background:rgba(31,59,92,.07);
+      border:1px solid rgba(31,59,92,.12);
+      margin-bottom:12px;
+    }
+    .apps-copy h3{
+      color:var(--brand-blue);
+      font-size:28px;
+      margin-bottom:10px;
+      font-family:'League Spartan',sans-serif;
+      font-weight:900;
+    }
+    .apps-copy p{
+      color:#5f6b7a;
+      font-size:16px;
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+      max-width:62ch;
+      margin-bottom:18px;
+    }
+    .apps-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      align-items:center;
+    }
+    .apps-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:13px 17px;
+      border-radius:14px;
+      text-decoration:none;
+      font-weight:900;
+      background:var(--brand-blue);
+      color:#fff;
+      box-shadow:0 14px 34px rgba(31,59,92,.20);
+      transition:transform .15s ease, opacity .15s ease;
+    }
+    .apps-btn:hover{opacity:.94}
+    .apps-btn:active{transform:scale(.985)}
+    .apps-note{
+      color:#6b7280;
+      font-size:13px;
+      font-weight:800;
+    }
+    .apps-panel{
+      position:relative;
+      z-index:2;
+      border-radius:22px;
+      background:rgba(31,59,92,.06);
+      border:1px solid rgba(31,59,92,.11);
+      padding:18px;
+      display:grid;
+      gap:10px;
+    }
+    .apps-panel-title{
+      color:var(--brand-blue);
+      font-weight:900;
+      font-family:'League Spartan',sans-serif;
+      font-size:20px;
+      margin-bottom:2px;
+    }
+    .apps-chip{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      background:#fff;
+      border:1px solid rgba(31,59,92,.08);
+      color:#1f2933;
+      font-weight:850;
+      box-shadow:0 8px 18px rgba(0,0,0,.04);
+    }
+    .apps-chip small{
+      color:#6b7280;
+      font-weight:800;
+      white-space:nowrap;
+    }
+
+    .method{background:#eef3f9}
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(6,1fr);
+      gap:16px;
+    }
+    .step{
+      background:#fff;
+      padding:18px 14px;
+      border-radius:16px;
+      text-align:center;
+      box-shadow:0 10px 26px rgba(0,0,0,.05);
+      border:1px solid rgba(17,24,39,.05);
+    }
+    .step span{display:block;font-size:26px;font-weight:900;color:var(--brand-blue-2);margin-bottom:6px}
+    .step p{font-weight:900;color:#374151;font-size:14px}
+
+    .about{
+      background:var(--brand-blue);
+      color:#fff;
+      position:relative;
+      overflow:hidden;
+    }
+    .about::before{
+      content:"";
+      position:absolute;
+      width:780px;height:780px;
+      left:-360px; top:-420px;
+      background:radial-gradient(circle at center, rgba(77,127,184,.28), transparent 62%);
+      opacity:.9;
+    }
+    .about .section-title h3{
+      color:#f2f4f7;
+      font-size:24px;
+      text-transform:none;
+    }
+    .about .section-title p{
+      color:#d7e0ee;
+    }
+    .about p{
+      position:relative;
+      max-width:880px;
+      margin:auto;
+      color:#d7e0ee;
+      font-size:16.6px;
+      line-height:1.78;
+      padding:0 8px;
+      font-family:'IBM Plex Sans Hebrew',sans-serif;
+    }
+
+    .contact{background:#f9fafb}
+    form{
+      max-width:640px;
+      margin:auto;
+      background:#fff;
+      padding:34px;
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(17,24,39,.06);
+    }
+    form input, form textarea, form select{
+      width:100%;
+      padding:14px 14px;
+      margin-bottom:14px;
+      border:1px solid #d1d5db;
+      border-radius:14px;
+      font-size:15px;
+      outline:none;
+      font-family:'Inter',sans-serif;
+    }
+    form input:focus, form textarea:focus, form select:focus{
+      border-color:rgba(77,127,184,.7);
+      box-shadow:0 0 0 4px rgba(77,127,184,.15);
+    }
+    form button{
+      width:100%;
+      padding:14px;
+      background:var(--brand-blue);
+      color:#fff;
+      border:none;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:15px;
+    }
+    form button:hover{opacity:.95}
+
+    footer{
+      background:#0b1220;
+      color:#9ca3af;
+      padding:34px 0;
+      text-align:center;
+    }
+
+    /* Info móvil (solo celular) */
+    .mobile-bottom-info{
+      display:none;
+      max-width:720px;
+      margin:16px auto 0;
+      padding:16px;
+      border-radius:18px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      text-align:left;
+    }
+    .mobile-bottom-info h4{
+      color:#fff;
+      margin-bottom:10px;
+      font-size:16px;
+      letter-spacing:.2px;
+      font-family:'League Spartan',sans-serif;
+      font-weight:900;
+    }
+    .quick-actions{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:10px;
+    }
+    .qa{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      text-decoration:none;
+      color:#fff;
+      font-weight:900;
+    }
+    .qa small{color:#cbd5e1;font-weight:700;font-family:'IBM Plex Sans Hebrew',sans-serif}
+    .qa:hover{opacity:.92}
+
+    /* MODAL */
+    .modal{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.55);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:9999;
+      padding:16px;
+    }
+    .modal.show{opacity:1;pointer-events:auto}
+    .modal-content{
+      width:min(920px, 100%);
+      background:#fff;
+      border-radius:22px;
+      padding:22px;
+      box-shadow:0 28px 80px rgba(0,0,0,.35);
+      max-height:86vh;
+      overflow:auto;
+      position:relative;
+    }
+    .modal-title{
+      font-size:22px;
+      margin-bottom:12px;
+      color:var(--brand-blue);
+      font-weight:900;
+      font-family:'League Spartan',sans-serif;
+    }
+    .modal-close{
+      position:sticky;
+      top:0;
+      margin-left:auto;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:40px;height:40px;
+      border-radius:12px;
+      border:1px solid rgba(31,59,92,.15);
+      background:#fff;
+      cursor:pointer;
+      font-size:18px;
+      font-weight:900;
+      float:right;
+    }
+    .proposal{
+      border:1px solid rgba(31,59,92,.10);
+      border-radius:16px;
+      padding:16px;
+      margin:12px 0;
+      background:#fff;
+    }
+    .proposal h4{margin:0 0 8px 0;font-size:18px;color:#111827}
+    .proposal p{color:#6b7280;margin:0 0 10px 0;font-family:'IBM Plex Sans Hebrew',sans-serif}
+    .proposal .actions{
+      margin-top:10px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    .mini-btn{
+      border:none;
+      background:var(--brand-blue-2);
+      color:#fff;
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:13px;
+    }
+    .mini-btn.outline{
+      background:#fff;
+      color:var(--brand-blue);
+      border:1px solid rgba(31,59,92,.18);
+    }
+
+    /* Inline mini-form inside modal */
+    .interest-form{
+      margin-top:14px;
+      padding:14px;
+      border-radius:16px;
+      border:1px dashed rgba(31,59,92,.20);
+      background:rgba(31,59,92,.03);
+      display:none;
+    }
+    .interest-form.show{display:block}
+    .interest-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:10px;
+    }
+    .interest-form label{
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.2px;
+      color:rgba(31,59,92,.78);
+      display:block;
+      margin-bottom:6px;
+    }
+    .interest-form input, .interest-form textarea, .interest-form select{
+      width:100%;
+      border:1px solid rgba(17,24,39,.14);
+      border-radius:14px;
+      padding:12px 12px;
+      font-size:14px;
+      font-family:'Inter',sans-serif;
+      background:#fff;
+    }
+    .interest-form textarea{grid-column:1 / -1; resize:vertical; min-height:88px}
+    .interest-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:12px;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(31,59,92,.16);
+      background:#fff;
+      font-weight:900;
+      cursor:pointer;
+      color:var(--brand-blue);
+    }
+    .pill.primary{
+      background:var(--brand-blue);
+      color:#fff;
+      border-color:rgba(255,255,255,.12);
+    }
+
+    /* Popup */
+    .success-popup{
+      position:fixed;
+      top:16px; right:16px;
+      background:#fff;
+      border-left:6px solid var(--brand-blue-2);
+      padding:14px 16px;
+      border-radius:16px;
+      box-shadow:0 16px 40px rgba(0,0,0,.18);
+      max-width:360px;
+      opacity:0;
+      transform:translateY(-12px);
+      pointer-events:none;
+      transition:all .35s ease;
+      z-index:10000;
+      font-weight:900;
+    }
+    .success-popup.show{opacity:1;transform:translateY(0);pointer-events:auto}
+
+    /* =========================
+       OFFSET for anchored scroll
+       ========================= */
+    section{scroll-margin-top: var(--sticky-offset);}
+
+    /* =========================
+       RESPONSIVE
+       ========================= */
+    @media(max-width:1100px){
+      .highlights-grid{grid-template-columns:1fr;}
+      .services-grid{grid-template-columns:repeat(2, minmax(0,1fr));}
+      .interest-grid{grid-template-columns:1fr;}
+      .price-grid{grid-template-columns:1fr;}
+    }
+
+    @media(max-width:980px){
+      /* MÓVIL: más espacio entre servicios para que no colapse el botón */
+      .grid-3{grid-template-columns:1fr; gap:44px;}
+      .steps{grid-template-columns:repeat(2,1fr)}
+      section{padding:64px 0}
+      .hero{grid-template-columns:1fr; gap:22px}
+      .hero-visual{min-height:auto}
+      .apps-access-card{grid-template-columns:1fr; padding:26px;}
+      .apps-copy h3{font-size:25px;}
+    }
+
+    @media(max-width:900px){
+      /* móvil: ocultar marca en la barra fija (solo botón menú) */
+      .brand{display:none}
+
+      /* oculto zócalo arriba en móvil */
+      .topbar{display:none}
+
+      /* in mobile, keep sticky shell but nav tighter */
+      .nav-row{padding:10px 16px}
+      .brand h1{font-size:18px}
+      .nav-links{display:none}
+      .hamburger{display:inline-flex}
+
+      header{padding:22px 0 44px}
+
+      .hero-main-title{font-size:42px}
+      .hero-subtitle{font-size:16.5px}
+      .hero-desc{font-size:15.8px;max-width:none}
+
+      .buttons{flex-direction:column;align-items:stretch}
+      .btn{width:100%}
+
+      .card{padding:26px 22px}
+      .card h4{font-size:21px}
+      .card p{font-size:15px}
+
+      .modal-content{border-radius:18px;max-height:90vh;padding:18px}
+
+      /* mostrar info abajo en móvil */
+      .mobile-bottom-info{display:block}
+
+      /* PC highlights NO, móvil mantiene tarjetitas en header */
+      .highlights{display:none}
+      .hero-visual{display:block}
+
+      /* CTA hidden on very small screens to reduce clutter */
+      .cta-pill{display:none}
+    }
+
+    /* PC: oculto tarjetitas del header y muestro highlights debajo */
+    @media(min-width:901px){
+      .hero-visual{display:none}
+      .highlights{display:block}
+      .hamburger{display:none}
+      .mobile-menu{display:none !important}
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sticky: topbar + nav (PC) -->
+  <div class="sticky-shell" id="stickyShell">
+    <div class="topbar" aria-label="Zócalo superior">
+      <div class="topbar-inner">
+        <div class="topbar-left">Consultora Educativa</div>
+        <div class="topbar-ticker" aria-label="Información institucional">
+          <div class="topbar-track">
+            <span>Email: <a href="mailto:docentesbrown-oficial@gmail.com">docentesbrown-oficial@gmail.com</a></span>
+            <span>WhatsApp: <a href="https://wa.me/5491153196358" target="_blank" rel="noopener">+54 9 11 5319-6358</a></span>
+            <span><a href="https://instagram.com/docentesbrown" target="_blank" rel="noopener">Instagram</a></span>
+            <span>Lanzamiento completo en 2027</span>
+            <span>Email: <a href="mailto:docentesbrown-oficial@gmail.com">docentesbrown-oficial@gmail.com</a></span>
+            <span>WhatsApp: <a href="https://wa.me/5491153196358" target="_blank" rel="noopener">+54 9 11 5319-6358</a></span>
+            <span><a href="https://instagram.com/docentesbrown" target="_blank" rel="noopener">Instagram</a></span>
+            <span>Lanzamiento completo en 2027</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-bar" aria-label="Barra de navegación">
+      <div class="nav-row">
+        <div class="brand">
+          <h1>DOCENTES BROWN | Consultora Educativa</h1>
+        </div>
+
+        <div class="nav-links" aria-label="Secciones">
+          <a href="#servicios" data-nav="servicios">Servicios</a>
+          <a href="#apps" data-nav="apps">Apps</a>
+          <a href="#metodologia" data-nav="metodologia">Metodología</a>
+          <a href="#nosotros" data-nav="nosotros">Nosotros</a>
+        </div>
+
+        <a class="cta-pill" href="#contacto" aria-label="Solicitar reunión institucional">Solicitar reunión</a>
+
+        <button class="hamburger" id="hamburger" type="button" aria-label="Abrir menú">
+          ☰ Menú
+        </button>
+      </div>
+
+      <div class="mobile-menu" id="mobileMenu" aria-label="Menú móvil">
+        <a href="#servicios">Servicios</a>
+        <a href="#apps">Nuestras apps</a>
+        <a href="#metodologia">Metodología</a>
+        <a href="#nosotros">Nosotros</a>
+        <a href="#contacto">Solicitar reunión</a>
+      </div>
+    </div>
+  </div>
+
+  <header>
+    <div class="container" style="position:relative; z-index:2;">
+      <div class="hero">
+        <div class="reveal d2">
+          <h1 class="hero-main-title">DOCENTES BROWN</h1>
+          <h2 class="hero-subtitle">Curadurías pedagógicas y desarrollo institucional</h2>
+
+          <p class="hero-desc">
+            El lanzamiento completo de la consultora será en 2027. Actualmente se encuentra disponible
+            el servicio de curaduría de Proyectos de Cátedra para Educación Superior.
+          </p>
+
+          <div class="buttons">
+            <a href="#servicios" class="btn btn-primary js-open-curaduria">Solicitar turno de curaduría</a>
+            <a href="https://docentesbrown-oficial.github.io/Docentes-Brown-Oficial" class="btn btn-outline" target="_blank" rel="noopener">Ver nuestras apps</a>
+          </div>
+        </div>
+
+        <!-- SOLO MÓVIL: tarjetitas dentro del header -->
+        <div class="hero-visual reveal d3" aria-label="Impacto y enfoque">
+          <div class="hero-cards">
+            <div class="hc">
+              <div class="eyebrow">FOCO</div>
+              <h4>Enfoque</h4>
+              <p>Acompañamiento situado: análisis real del contexto + diseño con el equipo directivo y docente.</p>
+              <div class="hc-badges">
+                <span class="badge">Diagnóstico</span>
+                <span class="badge">Diseño</span>
+                <span class="badge">Implementación</span>
+              </div>
+            </div>
+
+            <div class="hc">
+              <div class="eyebrow">RESULTADO</div>
+              <h4>Impacto</h4>
+              <p>Procesos sostenibles: mejoras concretas en enseñanza, gestión y experiencias de aprendizaje.</p>
+              <div class="hc-badges">
+                <span class="badge">Mejora continua</span>
+                <span class="badge">Trabajo en equipo</span>
+              </div>
+            </div>
+
+            <div class="hc">
+              <div class="eyebrow">ALCANCE</div>
+              <h4>Alcance</h4>
+              <p>Propuestas para escuelas de gestión privada, sin importar tamaño o características institucionales.</p>
+              <div class="hc-badges">
+                <span class="badge">Escalable</span>
+                <span class="badge">Personalizado</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- SOLO PC: highlights editorial debajo del header -->
+  <section class="highlights" aria-label="Tarjetas destacadas">
+    <div class="container">
+      <div class="highlights-grid reveal d1">
+        <div class="highlight">
+          <div class="eyebrow">FOCO</div>
+          <h4>Enfoque</h4>
+          <p>Acompañamiento situado: análisis real del contexto + diseño con el equipo directivo y docente.</p>
+          <div class="highlight-badges">
+            <span class="badge">Diagnóstico</span>
+            <span class="badge">Diseño</span>
+            <span class="badge">Implementación</span>
+          </div>
+        </div>
+
+        <div class="highlight">
+          <div class="eyebrow">RESULTADO</div>
+          <h4>Impacto</h4>
+          <p>Procesos sostenibles: mejoras concretas en enseñanza, gestión y experiencias de aprendizaje.</p>
+          <div class="highlight-badges">
+            <span class="badge">Mejora continua</span>
+            <span class="badge">Trabajo en equipo</span>
+          </div>
+        </div>
+
+        <div class="highlight">
+          <div class="eyebrow">ALCANCE</div>
+          <h4>Alcance</h4>
+          <p>Propuestas para escuelas de gestión privada, sin importar tamaño o características institucionales.</p>
+          <div class="highlight-badges">
+            <span class="badge">Escalable</span>
+            <span class="badge">Personalizado</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="servicios">
+    <div class="container">
+      <div class="section-title reveal d1">
+        <h3>Servicios y turnos</h3>
+        <p>El lanzamiento integral de la consultora será en 2027. La curaduría de Proyectos de Cátedra ya se encuentra disponible.</p>
+      </div>
+
+      <div class="grid-3 services-grid">
+        <div class="card interactive reveal d2" data-type="curaduria">
+          <span class="notice-badge available">Disponible 2026</span>
+          <h4>Curaduría de Proyectos de Cátedra</h4>
+          <p>Servicio disponible para Educación Superior: revisión del proyecto, devolución profesional y posibilidad de encuentro virtual.</p>
+          <button class="card-btn" type="button">Solicitar turno</button>
+        </div>
+
+        <div class="card interactive reveal d3" data-type="programas">
+          <span class="notice-badge">Lanzamiento completo en 2027</span>
+          <h4>Programas Extracurriculares</h4>
+          <p>Próximamente estará habilitado este servicio.</p>
+          <button class="card-btn" type="button">Ver estado</button>
+        </div>
+
+        <div class="card interactive reveal d4" data-type="formacion">
+          <span class="notice-badge">Lanzamiento completo en 2027</span>
+          <h4>Formación Institucional</h4>
+          <p>Próximamente estará habilitado este servicio.</p>
+          <button class="card-btn" type="button">Ver estado</button>
+        </div>
+
+        <div class="card interactive reveal d4" data-type="acompanamiento">
+          <span class="notice-badge">Lanzamiento completo en 2027</span>
+          <h4>Acompañamiento</h4>
+          <p>Próximamente estará habilitado este servicio.</p>
+          <button class="card-btn" type="button">Ver estado</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="apps" class="apps-section">
+    <div class="container">
+      <div class="apps-access-card reveal d1">
+        <div class="apps-copy">
+          <span class="apps-kicker">Herramientas digitales</span>
+          <h3>Accedé a todas las apps de Docentes Brown</h3>
+          <p>
+            Reunimos en un solo lugar nuestras aplicaciones, calculadoras, buscadores y recursos digitales
+            para docentes, instituciones y equipos educativos.
+          </p>
+          <div class="apps-actions">
+            <a class="apps-btn" href="https://docentesbrown-oficial.github.io/Docentes-Brown-Oficial" target="_blank" rel="noopener">
+              Entrar al portal de apps
+            </a>
+            <span class="apps-note">Acceso abierto desde la web oficial.</span>
+          </div>
+        </div>
+
+        <div class="apps-panel" aria-label="Tipos de herramientas disponibles">
+          <div class="apps-panel-title">Qué vas a encontrar</div>
+          <div class="apps-chip"><span>Calculadoras y simuladores</span><small>Docentes</small></div>
+          <div class="apps-chip"><span>Buscadores y recursos</span><small>Educación</small></div>
+          <div class="apps-chip"><span>Herramientas institucionales</span><small>Gestión</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="metodologia" class="method">
+    <div class="container">
+      <div class="section-title reveal d1">
+        <h3>Nuestra Metodología</h3>
+        <p>Un proceso claro: diagnóstico, diseño, implementación y mejora continua.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step reveal d1"><span>1</span><p>Diagnóstico</p></div>
+        <div class="step reveal d2"><span>2</span><p>Diseño</p></div>
+        <div class="step reveal d3"><span>3</span><p>Equipos</p></div>
+        <div class="step reveal d4"><span>4</span><p>Implementación</p></div>
+        <div class="step reveal d2"><span>5</span><p>Seguimiento</p></div>
+        <div class="step reveal d3"><span>6</span><p>Evaluación</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="nosotros" class="about">
+    <div class="container">
+      <div class="section-title reveal d1">
+        <h3>Nosotros</h3>
+      </div>
+      <p class="reveal d2">
+        Docentes Brown es una consultora educativa conformada por profesionales de la educación comprometidos con la mejora
+        de las prácticas institucionales y pedagógicas. Trabajamos acompañando a escuelas y equipos educativos en procesos
+        de transformación que buscan fortalecer la enseñanza, optimizar la gestión y promover experiencias de aprendizaje significativas.
+        <br><br>
+        Entendemos que cada institución tiene una identidad, una historia y desafíos propios. Por eso nuestro trabajo no se basa
+        en propuestas estandarizadas, sino en el acompañamiento situado, el análisis de necesidades reales y la construcción conjunta
+        de estrategias de mejora.
+      </p>
+    </div>
+  </section>
+
+  <section id="contacto" class="contact">
+    <div class="container">
+      <div class="section-title reveal d1">
+        <h3>Solicitar reunión institucional</h3>
+        <p>Este formulario es para pactar una reunión y coordinar una visita institucional orientada al asesoramiento sobre nuestros servicios 2027.</p>
+      </div>
+
+      <form id="contactForm" action="https://formspree.io/f/mojlrgwb" method="POST" class="reveal d2">
+        <input type="hidden" name="origen" value="Solicitud de reunión institucional - Servicios 2027">
+        <input type="text" name="nombre" placeholder="Nombre y Apellido" required>
+        <input type="text" name="institucion" placeholder="Institución" required>
+        <input type="text" name="cargo" placeholder="Cargo" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <textarea name="mensaje" rows="4" placeholder="Contanos brevemente qué tipo de asesoramiento institucional querés coordinar para los servicios 2027."></textarea>
+        <button type="submit">Solicitar reunión</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 Docentes Brown - Consultora Educativa | Todos los derechos reservados</p>
+
+      <div class="mobile-bottom-info" aria-label="Información de contacto (móvil)">
+        <h4>Contacto institucional</h4>
+        <div class="quick-actions">
+          <a class="qa" href="https://wa.me/5491153196358" target="_blank" rel="noopener">
+            <span>WhatsApp</span>
+            <small>+54 9 11 5319-6358</small>
+          </a>
+          <a class="qa" href="mailto:docentesbrown-oficial@gmail.com">
+            <span>Email</span>
+            <small>docentesbrown-oficial@gmail.com</small>
+          </a>
+          <a class="qa" href="https://instagram.com/docentesbrown" target="_blank" rel="noopener">
+            <span>Instagram</span>
+            <small>@docentesbrown</small>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL propuestas + mini formulario -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Cerrar">×</button>
+      <div class="modal-title" id="modalTitle"></div>
+      <div id="modalList"></div>
+
+      <div id="interestFormWrap" class="interest-form" aria-label="Formulario de solicitud de turno">
+        <div style="font-weight:900; color: var(--brand-blue);">Solicitud de turno</div>
+        <div style="font-size:13px; color: rgba(31,59,92,.78); margin-top:4px;">
+          Completá tus datos y coordinamos el envío del proyecto junto con la modalidad de devolución.
+        </div>
+
+        <form id="interestForm" action="https://formsubmit.co/docentesbrown-oficial@gmail.com" method="POST" target="formSubmitFrame">
+          <input type="hidden" name="origen" value="Solicitud de turno - Curaduría de Proyectos de Cátedra">
+          <input type="hidden" name="propuesta" id="interestProposal" value="Curaduría de Proyectos de Cátedra">
+          <input type="hidden" name="_subject" value="Nueva solicitud de curaduría | Docentes Brown Consultora">
+          <input type="hidden" name="_template" value="box">
+          <input type="hidden" name="_captcha" value="false">
+          <textarea name="_autoresponse" style="display:none;">DOCENTES BROWN | CONSULTORA EDUCATIVA
+
+Recibimos tu solicitud de curaduría de Proyecto de Cátedra.
+
+Gracias por confiar en nuestro equipo. Nos vamos a comunicar durante las próximas 12 hs para coordinar el envío del proyecto, la modalidad de devolución y los próximos pasos.
+
+Modalidades disponibles:
+• Devolución escrita: $20.000
+• Devolución virtual por Meet, 1 hora: $25.000
+
+Equipo Docentes Brown | Consultora Educativa</textarea>
+
+          <div class="interest-grid">
+            <div>
+              <label>Nombre y Apellido</label>
+              <input name="nombre" required placeholder="Tu nombre" />
+            </div>
+            <div>
+              <label>Email</label>
+              <input name="email" type="email" required placeholder="tu@email.com" />
+            </div>
+            <div>
+              <label>WhatsApp</label>
+              <input name="whatsapp" required placeholder="Ej: 11 5319-6358" />
+            </div>
+            <div>
+              <label>Instituto donde va a presentarse</label>
+              <input name="instituto_presentacion" placeholder="Nombre del instituto / ISFD / ISFT" />
+            </div>
+            <div>
+              <label>Carrera / espacio curricular</label>
+              <input name="espacio_curricular" placeholder="Ej: Pedagogía / Didáctica / Campo de la Práctica" />
+            </div>
+            <div>
+              <label>Modalidad de devolución</label>
+              <select name="modalidad_devolucion" id="interestType" required>
+                <option value="">Elegí una modalidad</option>
+                <option value="Devolución escrita - $20.000">Devolución escrita - $20.000</option>
+                <option value="Devolución virtual por Meet (1 hora) - $25.000">Devolución virtual por Meet (1 hora) - $25.000</option>
+              </select>
+            </div>
+            <div style="grid-column:1 / -1">
+              <label>Mensaje</label>
+              <textarea name="mensaje" id="interestMessage" placeholder="Contanos brevemente de qué proyecto se trata y qué tipo de orientación necesitás."></textarea>
+            </div>
+          </div>
+
+          <div class="interest-actions">
+            <button class="pill primary" type="submit">Enviar solicitud por WhatsApp</button>
+            <button class="pill" id="interestCancel" type="button">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <iframe name="formSubmitFrame" id="formSubmitFrame" style="display:none;" title="Envío de confirmación"></iframe>
+
+  <div id="successPopup" class="success-popup">¡Gracias! Te responderemos pronto.</div>
+
+  <script>
+    /* =========================
+       Sticky offset -> keeps anchors correct
+       ========================= */
+    const stickyShell = document.getElementById('stickyShell');
+    function updateStickyOffset(){
+      if (!stickyShell) return;
+      const h = stickyShell.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--sticky-offset', Math.ceil(h + 16) + 'px');
+    }
+    window.addEventListener('resize', updateStickyOffset, {passive:true});
+    window.addEventListener('load', updateStickyOffset, {passive:true});
+    updateStickyOffset();
+
+    /* =========================
+       Mobile menu
+       ========================= */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (hamburger && mobileMenu) {
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.toggle('show');
+        hamburger.textContent = mobileMenu.classList.contains('show') ? '✕ Cerrar' : '☰ Menú';
+      });
+
+      mobileMenu.querySelectorAll('a').forEach(a => {
+        a.addEventListener('click', () => {
+          mobileMenu.classList.remove('show');
+          hamburger.textContent = '☰ Menú';
+        });
+      });
+    }
+
+    /* =========================
+       Active section underline (desktop)
+       ========================= */
+    const navLinks = Array.from(document.querySelectorAll('.nav-links a[data-nav]'));
+    const sectionIds = navLinks.map(a => a.getAttribute('data-nav'));
+    const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
+
+    function setActive(id){
+      navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('data-nav') === id));
+    }
+
+    if ('IntersectionObserver' in window && sections.length) {
+      const io = new IntersectionObserver((entries) => {
+        const visible = entries
+          .filter(e => e.isIntersecting)
+          .sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible && visible.target && visible.target.id) setActive(visible.target.id);
+      }, { root: null, threshold: [0.2, 0.35, 0.5], rootMargin: "-10% 0px -70% 0px" });
+
+      sections.forEach(s => io.observe(s));
+      setActive(sections[0].id);
+    }
+
+    /* =========================
+       Formspree submit helpers
+       ========================= */
+    const popup = document.getElementById('successPopup');
+
+    async function submitFormAjax(formEl){
+      try {
+        const res = await fetch(formEl.action, {
+          method: 'POST',
+          body: new FormData(formEl),
+          headers: { 'Accept': 'application/json' }
+        });
+        if(res.ok){
+          formEl.reset();
+          popup.textContent = "¡Gracias! Te responderemos pronto.";
+          popup.classList.add('show');
+          setTimeout(()=> popup.classList.remove('show'), 4200);
+          return true;
+        } else {
+          popup.textContent = "Ups, no pudimos enviar. Probá de nuevo.";
+          popup.classList.add('show');
+          setTimeout(()=> popup.classList.remove('show'), 4200);
+        }
+      } catch(err) {
+        console.error(err);
+        popup.textContent = "Error de conexión. Probá de nuevo.";
+        popup.classList.add('show');
+        setTimeout(()=> popup.classList.remove('show'), 4200);
+      }
+      return false;
+    }
+
+    // Main contact form
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await submitFormAjax(contactForm);
+      });
+    }
+
+    /* =========================
+       Servicios + Modal + Solicitud de turno
+       ========================= */
+    const serviceTitles = {
+      programas: 'Programas Extracurriculares',
+      formacion: 'Formación Institucional',
+      acompanamiento: 'Acompañamiento',
+      curaduria: 'Curaduría de Proyectos de Cátedra'
+    };
+
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalList = document.getElementById('modalList');
+    const modalClose = document.getElementById('modalClose');
+
+    const interestWrap = document.getElementById('interestFormWrap');
+    const interestForm = document.getElementById('interestForm');
+    const interestCancel = document.getElementById('interestCancel');
+    const interestProposal = document.getElementById('interestProposal');
+    const interestMessage = document.getElementById('interestMessage');
+    const interestType = document.getElementById('interestType');
+
+    function closeInterest(){
+      interestWrap.classList.remove('show');
+      if (interestProposal) interestProposal.value = 'Curaduría de Proyectos de Cátedra';
+      if (interestMessage) interestMessage.value = '';
+      if (interestType) interestType.value = '';
+    }
+
+    function openInterest(modalidad){
+      if (interestProposal) interestProposal.value = 'Curaduría de Proyectos de Cátedra';
+      if (interestType && modalidad) interestType.value = modalidad;
+      if (interestMessage) {
+        interestMessage.value = modalidad
+          ? `Quiero solicitar un turno para la curaduría de un Proyecto de Cátedra. Modalidad elegida: ${modalidad}.`
+          : 'Quiero solicitar un turno para la curaduría de un Proyecto de Cátedra.';
+      }
+      interestWrap.classList.add('show');
+      interestWrap.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+
+    function soonHTML(title){
+      return `
+        <div class="proposal">
+          <span class="notice-badge">Lanzamiento completo en 2027</span>
+          <h4>${title}</h4>
+          <p>Próximamente estará habilitado este servicio.</p>
+          <p>La consultora tendrá su lanzamiento completo en 2027. Mientras tanto, ya se encuentra disponible la curaduría de Proyectos de Cátedra para Educación Superior.</p>
+          <div class="actions">
+            <button class="mini-btn outline" type="button" data-close>Cerrar</button>
+            <button class="mini-btn" type="button" data-open-curaduria>Ver curaduría disponible</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function curaduriaHTML(){
+      return `
+        <div class="proposal">
+          <span class="notice-badge available">Servicio disponible desde 2026</span>
+          <h4>Curaduría de Proyectos de Cátedra para Educación Superior</h4>
+          <p>
+            La curaduría consiste en el envío de tu Proyecto de Cátedra para que lo revisemos,
+            chequeemos su coherencia pedagógica, organización, enfoque, fundamentación,
+            propuesta de evaluación y claridad general. Luego realizamos una devolución para orientar mejoras.
+          </p>
+          <div class="price-grid">
+            <div class="price-card">
+              <strong>Devolución escrita</strong>
+              <span>$20.000</span>
+              <p>Recibís una devolución escrita con observaciones, sugerencias y puntos de mejora.</p>
+              <div class="actions">
+                <button class="mini-btn" type="button" data-curaduria-form data-modalidad="Devolución escrita - $20.000">Solicitar escrita</button>
+              </div>
+            </div>
+            <div class="price-card">
+              <strong>Devolución virtual</strong>
+              <span>$25.000</span>
+              <p>Incluye una reunión virtual por Meet de 1 hora para conversar la devolución.</p>
+              <div class="actions">
+                <button class="mini-btn" type="button" data-curaduria-form data-modalidad="Devolución virtual por Meet (1 hora) - $25.000">Solicitar Meet</button>
+              </div>
+            </div>
+          </div>
+          <p>
+            Una vez enviada la solicitud, coordinamos el envío del proyecto y la disponibilidad del turno.
+          </p>
+        </div>
+      `;
+    }
+
+    function openModal(type){
+      const selectedType = type || 'curaduria';
+      modalTitle.textContent = serviceTitles[selectedType] || 'Servicios';
+      modalList.innerHTML = '';
+      closeInterest();
+
+      if (selectedType === 'curaduria') {
+        modalList.innerHTML = curaduriaHTML();
+      } else {
+        modalList.innerHTML = soonHTML(serviceTitles[selectedType] || 'Servicio');
+      }
+
+      modal.classList.add('show');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(){
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      closeInterest();
+    }
+
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (modal) modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    document.querySelectorAll('.card.interactive').forEach(card => {
+      const btn = card.querySelector('.card-btn');
+      if (!btn) return;
+      btn.addEventListener('click', () => openModal(card.dataset.type));
+    });
+
+    document.querySelectorAll('.js-open-curaduria').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        openModal('curaduria');
+      });
+    });
+
+    modalList.addEventListener('click', (e) => {
+      const closeBtn = e.target.closest('[data-close]');
+      const openCuraduriaBtn = e.target.closest('[data-open-curaduria]');
+      const curaduriaFormBtn = e.target.closest('[data-curaduria-form]');
+
+      if (closeBtn) return closeModal();
+      if (openCuraduriaBtn) return openModal('curaduria');
+
+      if (curaduriaFormBtn) {
+        const modalidad = curaduriaFormBtn.getAttribute('data-modalidad');
+        openInterest(modalidad);
+      }
+    });
+
+    if (interestCancel) {
+      interestCancel.addEventListener('click', () => closeInterest());
+    }
+
+    function getFormValue(formEl, name){
+      const field = formEl.elements[name];
+      return field && field.value ? field.value.trim() : '';
+    }
+
+    function buildWhatsappMessage(formEl){
+      const nombre = getFormValue(formEl, 'nombre');
+      const email = getFormValue(formEl, 'email');
+      const whatsapp = getFormValue(formEl, 'whatsapp');
+      const instituto = getFormValue(formEl, 'instituto_presentacion');
+      const espacio = getFormValue(formEl, 'espacio_curricular');
+      const modalidad = getFormValue(formEl, 'modalidad_devolucion');
+      const mensaje = getFormValue(formEl, 'mensaje');
+
+      return [
+        'Hola, Docentes Brown. Quiero solicitar un turno para una CURADURÍA de Proyecto de Cátedra para Educación Superior.',
+        '',
+        'Nombre y Apellido: ' + (nombre || '-'),
+        'Email: ' + (email || '-'),
+        'WhatsApp: ' + (whatsapp || '-'),
+        'Instituto donde va a presentarse: ' + (instituto || '-'),
+        'Carrera / espacio curricular: ' + (espacio || '-'),
+        'Modalidad elegida: ' + (modalidad || '-'),
+        '',
+        'Mensaje: ' + (mensaje || '-')
+      ].join('\n');
+    }
+
+    function submitCuraduriaForm(formEl){
+      const whatsappNumber = '5491153196358';
+      const message = buildWhatsappMessage(formEl);
+      const whatsappUrl = 'https://wa.me/' + whatsappNumber + '?text=' + encodeURIComponent(message);
+
+      formEl.target = 'formSubmitFrame';
+      formEl.submit();
+
+      window.open(whatsappUrl, '_blank', 'noopener');
+
+      popup.textContent = 'Solicitud preparada. Te abrimos WhatsApp y también enviamos la confirmación al email cargado.';
+      popup.classList.add('show');
+      setTimeout(()=> popup.classList.remove('show'), 5200);
+
+      setTimeout(() => {
+        formEl.reset();
+        closeModal();
+      }, 900);
+    }
+
+    if (interestForm) {
+      interestForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        submitCuraduriaForm(interestForm);
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('show')) closeModal();
+    });
+  </script>
+
+</body>
+</html>
